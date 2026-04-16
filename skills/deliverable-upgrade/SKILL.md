@@ -1,7 +1,7 @@
 ---
-name: upgrade
+name: deliverable-upgrade
 description: >-
-  [deliverable] Use when the user asks to upgrade, update, or get the latest
+  Use when the user asks to upgrade, update, or get the latest
   version of deliverable. Detects install type (git, npx, vendored), checks for
   updates, runs the upgrade, and shows what changed.
 ---

@@ -6,7 +6,7 @@ The person funding or championing this initiative — cares about why now, what 
 
 ## Phases
 
-- Phase 0: Project charter (when charter phase is active)
+- Phase 0: Project deliverable-charter (when deliverable-charter phase is active)
 - Phase 3: BRD — Problem & users
 
 ## Question bank
@@ -26,7 +26,7 @@ Priority-ordered. Pick a subset based on what's already known.
 
 ## Strong vs weak answers
 
-**Strong:** "We're losing 15% of enterprise deals in the security review stage because we don't have SOC 2. Three deals worth $2M total stalled in Q1. The board asked us to fix this by Q3."
+**Strong:** "We're losing 15% of enterprise deals in the security deliverable-review stage because we don't have SOC 2. Three deals worth $2M total stalled in Q1. The board asked us to fix this by Q3."
 
 **Weak:** "We need to improve our security posture." (No evidence, no urgency, no measurable outcome. Push back: "What specifically is broken today? Who is affected? What's the cost of not fixing it?")
 

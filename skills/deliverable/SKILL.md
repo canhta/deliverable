@@ -1,7 +1,7 @@
 ---
 name: deliverable
 description: >-
-  [deliverable] Use when the user asks to write, plan, or structure product or
+  Use when the user asks to write, plan, or structure product or
   engineering requirements — BRD, SRS, PRD, RFC, design doc, project charter,
   roadmap, "spec this feature," "requirements for X," or any variant. Routes to
   the appropriate deliverable sub-skill based on what the user needs.
@@ -65,12 +65,12 @@ Before routing, check for existing state:
 ```mermaid
 flowchart TD
     A[User request] --> B{What do they need?}
-    B -->|"charter", "initiative brief", "why are we doing this"| C[charter]
-    B -->|"BRD", "requirements", "spec this", "business requirements"| D[brd]
-    B -->|"SRS", "technical spec", "architecture", "engineering spec"| E[srs]
-    B -->|"red-team", "challenge this", "what's wrong with this"| F[critic]
-    B -->|"review", "audit", "check the docs"| G[review]
-    B -->|"interview", "prepare questions", "ask stakeholders"| H[interview]
+    B -->|"charter", "initiative brief", "why are we doing this"| C[deliverable-charter]
+    B -->|"BRD", "requirements", "spec this", "business requirements"| D[deliverable-brd]
+    B -->|"SRS", "technical spec", "architecture", "engineering spec"| E[deliverable-srs]
+    B -->|"red-team", "challenge this", "what's wrong with this"| F[deliverable-critic]
+    B -->|"review", "audit", "check the docs"| G[deliverable-review]
+    B -->|"interview", "prepare questions", "ask stakeholders"| H[deliverable-interview]
     B -->|"upgrade", "update deliverable"| U[upgrade]
     B -->|ambiguous| I[Ask user to clarify]
 ```
@@ -79,25 +79,25 @@ flowchart TD
 
 | User says                               | Invoke                          | Why                                   |
 | --------------------------------------- | ------------------------------- | ------------------------------------- |
-| "Write a BRD for X"                     | **brd**       | Explicit BRD request                  |
-| "Spec this feature"                     | **brd**       | Feature spec = BRD                    |
-| "Requirements for X"                    | **brd**       | General requirements = start with BRD |
-| "Write an SRS" / "Technical spec"       | **srs**      | Explicit SRS/tech spec                |
-| "Project charter" / "Initiative brief"  | **charter**             | Explicit charter                      |
-| "Plan this project properly"            | **charter**             | Start from the top                    |
-| "Review the requirements"               | **review**         | Review existing docs                  |
-| "Red-team this" / "Challenge this spec" | **critic**       | Adversarial review                    |
-| "I need to interview the CTO"           | **interview**       | Interview prep                        |
+| "Write a BRD for X"                     | **deliverable-brd**       | Explicit BRD request                  |
+| "Spec this feature"                     | **deliverable-brd**       | Feature spec = BRD                    |
+| "Requirements for X"                    | **deliverable-brd**       | General requirements = start with BRD |
+| "Write an SRS" / "Technical spec"       | **deliverable-srs**      | Explicit SRS/tech spec                |
+| "Project charter" / "Initiative brief"  | **deliverable-charter**             | Explicit charter                      |
+| "Plan this project properly"            | **deliverable-charter**             | Start from the top                    |
+| "Review the requirements"               | **deliverable-review**         | Review existing docs                  |
+| "Red-team this" / "Challenge this spec" | **deliverable-critic**       | Adversarial deliverable-review                    |
+| "I need to interview the CTO"           | **deliverable-interview**       | Interview prep                        |
 | "upgrade deliverable" / "update"        | **upgrade**         | Self-update                           |
-| First time, no docs exist               | Offer **charter** first | Start from the top for greenfield     |
+| First time, no docs exist               | Offer **deliverable-charter** first | Start from the top for greenfield     |
 | "Continue where we left off"            | Check `state.md`                | Resume whichever skill was active     |
 
 ### The natural flow
 
 ```
-charter → brd → srs → critic → review
+deliverable-charter → deliverable-brd → deliverable-srs → deliverable-critic → deliverable-review
                           ↑
-                  interview (anytime)
+                  deliverable-interview (anytime)
 ```
 
 Each skill works independently, but they chain through shared artifacts in `docs/requirements/`.
@@ -139,15 +139,15 @@ Ask:
 
 > _"I can help with requirements. What would you like to do?_
 >
-> - \*Start from scratch → **charter\***
-> - \*Write business requirements → **brd\***
-> - \*Write technical requirements → **srs\***
-> - \*Challenge existing requirements → **critic\***
-> - \*Quality check existing docs → **review\***
-> - \*Prepare for stakeholder interviews → **interview\***"
+> - \*Start from scratch → **deliverable-charter\***
+> - \*Write business requirements → **deliverable-brd\***
+> - \*Write technical requirements → **deliverable-srs\***
+> - \*Challenge existing requirements → **deliverable-critic\***
+> - \*Quality check existing docs → **deliverable-review\***
+> - \*Prepare for stakeholder interviews → **deliverable-interview\***"
 
 ### Resume protocol
 
 1. Read `~/.claude/projects/<slug>/deliverable/state.md` if it exists
 2. If a skill was in progress, offer to resume
-3. If all phases complete, offer review or new project
+3. If all phases complete, offer deliverable-review or new project

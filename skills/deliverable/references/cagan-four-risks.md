@@ -80,7 +80,7 @@ Every product initiative must address four risks. If any is unresolved, the proj
 
 ## How to use this framework
 
-During red-team review (phase 16), evaluate the BRD and SRS against all four risks. For each risk:
+During red-team deliverable-review (phase 16), evaluate the BRD and SRS against all four risks. For each risk:
 
 1. Is there evidence the risk has been addressed?
 2. Is the evidence from users/data (strong) or from assumptions (weak)?

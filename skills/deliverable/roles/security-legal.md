@@ -39,7 +39,7 @@ Priority-ordered. Pick a subset based on what's already known.
 12. Is there an existing compliance framework we need to fit into?
 13. What evidence do auditors need? What documentation is required?
 14. Are there third-party data processors? What's the DPA situation?
-15. Is legal review required before launch? What's the approval process?
+15. Is legal deliverable-review required before launch? What's the approval process?
 
 ## Strong vs weak answers
 

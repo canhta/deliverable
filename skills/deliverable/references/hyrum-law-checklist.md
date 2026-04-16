@@ -12,9 +12,9 @@ Any behavior your system exhibits — whether intentional or accidental — will
 4. Ordering of unordered results becomes assumed
 5. Timing of operations becomes relied upon
 
-## Checklist for requirements review
+## Checklist for requirements deliverable-review
 
-Use this during red-team review (phase 16) and SRS drafting (phases 8-10).
+Use this during red-team deliverable-review (phase 16) and SRS drafting (phases 8-10).
 
 ### API contracts
 
@@ -54,7 +54,7 @@ Use this during red-team review (phase 16) and SRS drafting (phases 8-10).
 
 ## How to use this checklist
 
-During SRS review, scan each interface and data contract against these items. For each "no" answer:
+During SRS deliverable-review, scan each interface and data contract against these items. For each "no" answer:
 
 1. Is this an intentional omission? → Document it as explicit non-guarantee
 2. Is this an oversight? → Add specification to SRS

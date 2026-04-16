@@ -1,10 +1,10 @@
 ---
-name: brd
+name: deliverable-brd
 description: >-
-  [deliverable] Use when the user asks to write business requirements — BRD,
+  Use when the user asks to write business requirements — BRD,
   PRD, "spec this feature," "requirements for X," or any variant. Conducts
   intake, discovery research via sub-agents, then drafts BRD section by section
-  with role-based interviews, approval gates, and stakeholder interview handoff.
+  with role-based interviews, approval gates, and stakeholder deliverable-interview handoff.
   Produces brd.md, decisions.md, and open-questions.md.
 ---
 
@@ -19,9 +19,9 @@ All templates, roles, sub-agents, and references are in the `deliverable` skill 
 - `sub-agents/*.md` → read from `deliverable/sub-agents/*.md`
 - `references/*.md` → read from `deliverable/references/*.md`
 
-Draft business requirements through structured interview and research. Works section by section with your approval at every step. Pushes back on vague answers. Spawns bounded sub-agents for competitive research and feasibility checks.
+Draft business requirements through structured deliverable-interview and research. Works section by section with your approval at every step. Pushes back on vague answers. Spawns bounded sub-agents for competitive research and feasibility checks.
 
-Announce at start: _"I'm using the [deliverable] brd skill to draft a BRD through structured phases with approval gates."_
+Announce at start: _"I'm using the deliverable-brd skill to draft a BRD through structured phases with approval gates."_
 
 <HARD-GATE>
 NEVER draft the entire BRD in one shot. NEVER write multiple sections in a single turn. NEVER advance to the next phase without explicit user approval. NEVER write to disk without announcing and getting confirmation.
@@ -30,7 +30,7 @@ NEVER draft the entire BRD in one shot. NEVER write multiple sections in a singl
 ## When to use
 
 - "write a BRD", "business requirements", "spec this feature", "requirements for X"
-- After charter skill completes (if charter was done)
+- After deliverable-charter skill completes (if deliverable-charter was done)
 
 ## Phases
 
@@ -49,13 +49,13 @@ flowchart TD
 
 Five questions, one at a time:
 
-1. **Project name and slug** (skip if charter exists)
+1. **Project name and slug** (skip if deliverable-charter exists)
 2. **Preset** — `greenfield / feature / internal / auto`
 3. **Extras — product-facing** — `prd-lite / exec-onepager / none`
 4. **Extras — engineering-facing** — `rfc / acceptance-tests / none`
 5. **Extras — cross-cutting** — `risks-register / planning-handoff / roadmap / none`
 
-**Auto-bump signals:** If user mentions PII, payment data, PHI, regulated industry — note in state.md for srs skill.
+**Auto-bump signals:** If user mentions PII, payment data, PHI, regulated industry — note in state.md for deliverable-srs skill.
 
 ### Discovery Research
 
@@ -121,7 +121,7 @@ Orient → Work → Present → Approve/Edit/Revise/Kill → Commit.
 
 ## Interview Handoff
 
-User can't answer? Suggest the **interview** skill to generate templates. Pause phase, resume when answers return.
+User can't answer? Suggest the **deliverable-interview** skill to generate templates. Pause phase, resume when answers return.
 
 ## Tone
 

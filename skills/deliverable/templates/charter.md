@@ -50,7 +50,7 @@
 
 ## Go / no-go criteria
 
-<What must be true for the project to proceed past charter to requirements? What would cause a no-go?>
+<What must be true for the project to proceed past deliverable-charter to requirements? What would cause a no-go?>
 
 ## Next step
 

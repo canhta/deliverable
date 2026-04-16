@@ -11,20 +11,20 @@ Most AI tools dump a 20-page BRD in one shot. It looks complete. It's not. Half 
 | Skill                    | Trigger                                | What it does                                                       |
 | ------------------------ | -------------------------------------- | ------------------------------------------------------------------ |
 | `deliverable`            | any requirements request                  | Routes to the right skill based on what you need                   |
-| `charter`        | "project charter", "initiative brief"     | Establishes business justification, vision, stakeholders, go/no-go |
-| `brd`  | "write a BRD", "spec this feature"        | Intake, research, BRD drafting with role-based interviews          |
-| `srs` | "write an SRS", "technical spec"          | SRS drafting — architecture, interfaces, NFRs, rollout             |
-| `critic`    | "challenge this spec", "find holes"       | Adversarial review against Cagan's four risks and Hyrum's Law      |
-| `review`    | "review requirements", "audit the BRD"   | Quality audit — completeness, consistency, measurability           |
-| `interview`  | "prepare interview questions"             | Generates structured interview templates for real stakeholders     |
+| `deliverable-charter`        | "project charter", "initiative brief"     | Establishes business justification, vision, stakeholders, go/no-go |
+| `deliverable-brd`  | "write a BRD", "spec this feature"        | Intake, research, BRD drafting with role-based interviews          |
+| `deliverable-srs` | "write an SRS", "technical spec"          | SRS drafting — architecture, interfaces, NFRs, rollout             |
+| `deliverable-critic`    | "challenge this spec", "find holes"       | Adversarial deliverable-review against Cagan's four risks and Hyrum's Law      |
+| `deliverable-review`    | "deliverable-review requirements", "audit the BRD"   | Quality audit — completeness, consistency, measurability           |
+| `deliverable-interview`  | "prepare deliverable-interview questions"             | Generates structured deliverable-interview templates for real stakeholders     |
 | `upgrade`    | "upgrade deliverable"                     | Auto-detects install type and upgrades to latest version           |
 
 ### The natural flow
 
 ```
-charter → brd → srs → critic → review
+deliverable-charter → deliverable-brd → deliverable-srs → deliverable-critic → deliverable-review
                           ↑
-                  interview (anytime)
+                  deliverable-interview (anytime)
 ```
 
 Each skill works independently, but they chain through shared artifacts.
@@ -83,7 +83,7 @@ Just say "upgrade deliverable" — the upgrade skill handles it automatically.
 
 ```
 > Write a BRD for our new auth system
-> Project charter for the data platform migration
+> Project deliverable-charter for the data platform migration
 > Technical spec for the notification service
 > Red-team this spec
 > Review the requirements
@@ -118,7 +118,7 @@ Research agents dispatched with your approval:
 
 ### Adaptive depth
 
-Mention credit card data, HIPAA, or regulated industry and the srs skill automatically adds security, privacy, and compliance phases. No mode selection — it just adapts.
+Mention credit card data, HIPAA, or regulated industry and the deliverable-srs skill automatically adds security, privacy, and compliance phases. No mode selection — it just adapts.
 
 ### Presets
 
@@ -157,16 +157,16 @@ docs/requirements/
 .
 ├── skills/
 │   ├── deliverable/SKILL.md              # Router
-│   ├── charter/SKILL.md          # Charter authoring
-│   ├── brd/SKILL.md    # BRD authoring
-│   ├── srs/SKILL.md   # SRS authoring
-│   ├── critic/SKILL.md      # Adversarial review
-│   ├── review/SKILL.md      # Quality audit
-│   ├── interview/SKILL.md    # Interview prep
+│   ├── deliverable-charter/SKILL.md          # Charter authoring
+│   ├── deliverable-brd/SKILL.md    # BRD authoring
+│   ├── deliverable-srs/SKILL.md   # SRS authoring
+│   ├── deliverable-critic/SKILL.md      # Adversarial deliverable-review
+│   ├── deliverable-review/SKILL.md      # Quality audit
+│   ├── deliverable-interview/SKILL.md    # Interview prep
 │   ├── upgrade/SKILL.md                  # Self-updater
 │   └── deliverable/
 │       ├── templates/                     # 15 artifact templates
-│       ├── roles/                         # 7 role-interview scripts
+│       ├── roles/                         # 7 role-deliverable-interview scripts
 │       ├── sub-agents/                    # 5 sub-agent prompt packs
 │       ├── references/                    # Cagan, Google design docs, Hyrum's Law
 │       └── bin/                           # update-check, config, slug, status, validate, reset

@@ -1,8 +1,8 @@
-# Sub-agent: red-team-critic
+# Sub-agent: red-team-deliverable-critic
 
 ## Scope
 
-- Adversarial review of the complete BRD + SRS + decisions (dispatched in phase 16)
+- Adversarial deliverable-review of the complete BRD + SRS + decisions (dispatched in phase 16)
 - Check against Cagan's four risks, Hyrum's Law traps, and operational gaps
 - Return numbered concerns classified by severity
 - Declared budget: ~5 min, ~5k output tokens
@@ -46,15 +46,15 @@ For each concern, classify severity:
 
 ## Input schema
 
-- `brd`: string — full BRD content
-- `srs`: string — full SRS content
+- `deliverable-brd`: string — full BRD content
+- `deliverable-srs`: string — full SRS content
 - `decisions`: string — full decisions.md content
 - `open_questions`: string — full open-questions.md content
 
 ## Output schema
 
 ```markdown
-## Red-team review
+## Red-team deliverable-review
 
 ### Summary
 

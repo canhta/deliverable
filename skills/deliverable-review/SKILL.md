@@ -1,11 +1,11 @@
 ---
-name: review
+name: deliverable-review
 description: >-
-  [deliverable] Use when the user asks to review, audit, or quality-check
+  Use when the user asks to deliverable-review, audit, or quality-check
   existing requirements documents. Scores documents across 6 dimensions:
   completeness,
   cross-link integrity, internal consistency, measurability, preset compliance,
-  and downstream readiness. Produces a review report and offers to fix issues.
+  and downstream readiness. Produces a deliverable-review report and offers to fix issues.
 ---
 
 # Requirements Review
@@ -21,12 +21,12 @@ All templates, roles, sub-agents, and references are in the `deliverable` skill 
 
 Final quality gate. Reviews all produced documents for consistency, completeness, and quality. Scores each dimension, flags failures, and offers to fix them.
 
-Announce at start: _"I'm using the [deliverable] review skill to audit your requirements documents."_
+Announce at start: _"I'm using the deliverable-review skill to audit your requirements documents."_
 
 ## When to use
 
-- "review requirements", "audit the BRD", "check the docs", "quality check"
-- After critic completes
+- "deliverable-review requirements", "audit the BRD", "check the docs", "quality check"
+- After deliverable-critic completes
 - Anytime — works on any existing docs in `docs/requirements/`
 
 ## Prerequisites
@@ -49,7 +49,7 @@ Reads everything in `docs/requirements/`. At minimum needs `brd.md`. Works with 
 ```mermaid
 flowchart TD
     P1[Read all docs in docs/requirements/] --> P2[Score each dimension]
-    P2 --> P3[Present review report]
+    P2 --> P3[Present deliverable-review report]
     P3 --> P4{Any failures?}
     P4 -->|yes| P5[For each: fix now or accept as-is]
     P4 -->|no| P6[Announce completion]
@@ -90,7 +90,7 @@ When all dimensions pass (or accepted), announce:
 
 ## When auto-bump signals detected
 
-Also dispatch `sub-agents/red-team-critic.md` for an independent security-focused review. Present both findings.
+Also dispatch `sub-agents/red-team-deliverable-critic.md` for an independent security-focused deliverable-review. Present both findings.
 
 ## Tone
 
@@ -99,4 +99,4 @@ Also dispatch `sub-agents/red-team-critic.md` for an independent security-focuse
 
 ## Next step
 
-_"Requirements review complete. All documents are in `docs/requirements/`. Ready for implementation planning."_
+_"Requirements deliverable-review complete. All documents are in `docs/requirements/`. Ready for implementation planning."_

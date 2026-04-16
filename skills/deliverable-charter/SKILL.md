@@ -1,7 +1,7 @@
 ---
-name: charter
+name: deliverable-charter
 description: >-
-  [deliverable] Use when the user asks to write a project charter, initiative
+  Use when the user asks to write a project charter, initiative
   brief, or establish the business-level justification for a project before
   diving into detailed requirements. Produces charter.md with vision,
   objectives, stakeholders, constraints, and go/no-go criteria.
@@ -20,16 +20,16 @@ All templates, roles, sub-agents, and references are in the `deliverable` skill 
 
 Establish the portfolio-level justification before diving into requirements. Answers: why are we investing in this? Who has authority? What kills this project?
 
-Announce at start: _"I'm using the [deliverable] charter skill to establish the business-level justification for this initiative."_
+Announce at start: _"I'm using the deliverable-charter skill to establish the business-level justification for this initiative."_
 
 <HARD-GATE>
-NEVER draft the entire charter in one shot. NEVER write multiple sections in a single turn. NEVER write to disk without announcing and getting confirmation.
+NEVER draft the entire deliverable-charter in one shot. NEVER write multiple sections in a single turn. NEVER write to disk without announcing and getting confirmation.
 </HARD-GATE>
 
 ## When to use
 
 - "project charter", "initiative brief", "why are we doing this"
-- Starting a greenfield project — charter before BRD
+- Starting a greenfield project — deliverable-charter before BRD
 - Stakeholders need a go/no-go decision document
 
 ## Four-Beat Rhythm
@@ -76,7 +76,7 @@ flowchart LR
 
 ## Output Format
 
-After all charter sections are approved, ask:
+After all deliverable-charter sections are approved, ask:
 
 > _"Ready to write. What format would you like?_
 > _1. Markdown only (`charter.md`)_
@@ -109,7 +109,7 @@ Ask: who is on the project team? For each person: name, role, who they report to
 
 #### Extra section: Roles & Responsibilities
 
-For each role identified in the org chart (or the stakeholders section), ask for a bullet-point list of responsibilities. If the user already described responsibilities during the charter interview, offer to reuse them.
+For each role identified in the org chart (or the stakeholders section), ask for a bullet-point list of responsibilities. If the user already described responsibilities during the deliverable-charter deliverable-interview, offer to reuse them.
 
 #### Extra section: Training Plan
 
@@ -164,7 +164,7 @@ After all extra sections are approved, write `docs/requirements/charter-data.jso
 Then run:
 
 ```bash
-"$DELIVERABLE_ROOT/skills/deliverable/bin/excel-export" charter docs/requirements/charter-data.json
+"$DELIVERABLE_ROOT/skills/deliverable/bin/excel-export" deliverable-charter docs/requirements/charter-data.json
 ```
 
 This writes `docs/requirements/charter.xlsx`.

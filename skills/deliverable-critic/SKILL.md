@@ -1,7 +1,7 @@
 ---
-name: critic
+name: deliverable-critic
 description: >-
-  [deliverable] Use when the user asks to challenge, stress-test, or find holes
+  Use when the user asks to challenge, stress-test, or find holes
   in existing requirements documents. Dispatches an adversarial sub-agent that
   reviews BRD and SRS against Cagan's four risks, Hyrum's Law, and operational
   gaps. Walks through each concern with the user.
@@ -18,15 +18,15 @@ All templates, roles, sub-agents, and references are in the `deliverable` skill 
 - `sub-agents/*.md` → read from `deliverable/sub-agents/*.md`
 - `references/*.md` → read from `deliverable/references/*.md`
 
-Adversarial review of your requirements. Finds what's wrong, missing, or weak — then walks through each concern with you to decide: fix now, accept as risk, or defer.
+Adversarial deliverable-review of your requirements. Finds what's wrong, missing, or weak — then walks through each concern with you to decide: fix now, accept as risk, or defer.
 
-Announce at start: _"I'm using the [deliverable] critic skill to challenge your requirements and find blind spots."_
+Announce at start: _"I'm using the deliverable-critic skill to challenge your requirements and find blind spots."_
 
 ## When to use
 
 - "red-team this", "challenge these requirements", "what's wrong with this spec"
 - "stress-test the BRD", "find holes in the SRS"
-- After srs skill completes
+- After deliverable-srs skill completes
 - Anytime the user wants adversarial review of existing docs
 
 ## Prerequisites
@@ -38,13 +38,13 @@ Reads from `docs/requirements/`:
 - `decisions.md` (if exists)
 - `open-questions.md` (if exists)
 
-If no docs exist, tell the user and suggest brd first.
+If no docs exist, tell the user and suggest deliverable-brd first.
 
 ## Flow
 
 ```mermaid
 flowchart TD
-    P1[Read all existing docs] --> P2[Dispatch red-team-critic sub-agent]
+    P1[Read all existing docs] --> P2[Dispatch red-team-deliverable-critic sub-agent]
     P2 --> P3[Receive numbered concerns]
     P3 --> P4{Walk through each concern}
     P4 -->|fix now| P5[Jump to relevant section, redraft]
@@ -53,12 +53,12 @@ flowchart TD
     P5 --> P4
     P6 --> P4
     P7 --> P4
-    P4 -->|all addressed| DONE[Done → suggest review]
+    P4 -->|all addressed| DONE[Done → suggest deliverable-review]
 ```
 
 ### Step 1: Dispatch sub-agent
 
-Read `sub-agents/red-team-critic.md` and dispatch with:
+Read `sub-agents/red-team-deliverable-critic.md` and dispatch with:
 
 - Full content of brd.md, srs.md, decisions.md, open-questions.md
 - Scope: Cagan's four risks (read `references/cagan-four-risks.md`), Hyrum's Law traps (read `references/hyrum-law-checklist.md`), operational gaps
@@ -98,4 +98,4 @@ After all concerns addressed, summarize:
 
 ## Next step
 
-_"Red-team review complete. Ready for a quality check? Say 'review requirements' to continue."_
+_"Red-team deliverable-review complete. Ready for a quality check? Say 'deliverable-review requirements' to continue."_

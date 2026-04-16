@@ -23,15 +23,15 @@ You are playing devil's advocate with purpose — not being contrarian for sport
 
 ## Input schema
 
-- `review_type`: "brd" | "srs" — which document is being reviewed
+- `review_type`: "deliverable-brd" | "deliverable-srs" — which document is being reviewed
 - `draft`: string — the current draft content
 - `decisions`: string — decisions made so far
-- `phase`: string — which phase triggered this review
+- `phase`: string — which phase triggered this deliverable-review
 
 ## Output schema
 
 ```markdown
-## Second voice: <brd | srs> review
+## Second voice: <deliverable-brd | deliverable-srs> deliverable-review
 
 ### What I'd change
 
@@ -50,5 +50,5 @@ You are playing devil's advocate with purpose — not being contrarian for sport
 
 ### Questions for the team
 
-<2-3 questions this review raises that the team should discuss.>
+<2-3 questions this deliverable-review raises that the team should discuss.>
 ```
