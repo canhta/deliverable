@@ -1,23 +1,18 @@
 ---
 name: deliverable-srs
 description: >-
-  Use when the user asks to write technical requirements — SRS,
+  Drafts technical requirements (SRS) section by section, reading the existing
+  BRD as input. Covers architecture, interfaces, data, NFRs, security,
+  compliance, and rollout. Produces srs.md. Use when the user asks for an SRS,
   technical spec, architecture doc, engineering requirements, or "how should we
-  build this." Reads existing BRD, then drafts SRS section by section covering
-  architecture, interfaces, data, non-functional requirements, security,
-  compliance, and rollout. Produces srs.md.
+  build this."
 ---
 
 # Technical Requirements (SRS)
 
 ## Shared resources
 
-All templates, roles, sub-agents, and references are in the `deliverable` skill directory. When reading these files, look in the sibling `deliverable/` skill folder:
-
-- `roles/*.md` → read from `deliverable/roles/*.md`
-- `templates/*.md` → read from `deliverable/templates/*.md`
-- `sub-agents/*.md` → read from `deliverable/sub-agents/*.md`
-- `references/*.md` → read from `deliverable/references/*.md`
+Load on demand from the sibling `deliverable/` skill folder: `roles/*.md`, `templates/*.md`, `sub-agents/*.md`, `references/*.md`.
 
 Draft software requirements based on an approved BRD. Covers architecture, interfaces, data, NFRs, security, compliance, and rollout — each section drafted with your approval.
 
@@ -29,8 +24,7 @@ NEVER draft the entire SRS in one shot. NEVER write multiple sections in a singl
 
 ## When to use
 
-- "write an SRS", "technical spec", "architecture doc", "engineering requirements"
-- After deliverable-brd skill completes
+- After deliverable-brd completes
 
 ## Prerequisites
 

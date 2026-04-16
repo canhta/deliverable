@@ -1,22 +1,17 @@
 ---
 name: deliverable-charter
 description: >-
-  Use when the user asks to write a project charter, initiative
-  brief, or establish the business-level justification for a project before
-  diving into detailed requirements. Produces charter.md with vision,
-  objectives, stakeholders, constraints, and go/no-go criteria.
+  Establishes the portfolio-level business justification before requirements.
+  Drafts charter.md with vision, objectives, stakeholders, constraints, and
+  go/no-go criteria. Use when the user asks for a project charter, initiative
+  brief, or needs business justification before starting a BRD.
 ---
 
 # Project Charter
 
 ## Shared resources
 
-All templates, roles, sub-agents, and references are in the `deliverable` skill directory. When reading these files, look in the sibling `deliverable/` skill folder:
-
-- `roles/*.md` → read from `deliverable/roles/*.md`
-- `templates/*.md` → read from `deliverable/templates/*.md`
-- `sub-agents/*.md` → read from `deliverable/sub-agents/*.md`
-- `references/*.md` → read from `deliverable/references/*.md`
+Load on demand from the sibling `deliverable/` skill folder: `roles/*.md`, `templates/*.md`, `sub-agents/*.md`, `references/*.md`.
 
 Establish the portfolio-level justification before diving into requirements. Answers: why are we investing in this? Who has authority? What kills this project?
 
@@ -28,8 +23,7 @@ NEVER draft the entire deliverable-charter in one shot. NEVER write multiple sec
 
 ## When to use
 
-- "project charter", "initiative brief", "why are we doing this"
-- Starting a greenfield project — deliverable-charter before BRD
+- Starting a greenfield project — run before BRD
 - Stakeholders need a go/no-go decision document
 
 ## Four-Beat Rhythm
@@ -109,7 +103,7 @@ Ask: who is on the project team? For each person: name, role, who they report to
 
 #### Extra section: Roles & Responsibilities
 
-For each role identified in the org chart (or the stakeholders section), ask for a bullet-point list of responsibilities. If the user already described responsibilities during the deliverable-charter deliverable-interview, offer to reuse them.
+For each role identified in the org chart (or the stakeholders section), ask for a bullet-point list of responsibilities. If the user already described responsibilities during the the charter interview, offer to reuse them.
 
 #### Extra section: Training Plan
 

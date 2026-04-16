@@ -1,34 +1,26 @@
 ---
 name: deliverable-interview
 description: >-
-  Use when the user needs to prepare deliverable-interview questions for
-  stakeholders, can't answer a question during requirements gathering, or says
-  "I need to ask the CTO / team / users." Generates structured deliverable-interview
-  templates from role question banks that the user can hand to real stakeholders
-  offline.
+  Generates structured interview templates for real stakeholders from role-based
+  question banks. Produces ready-to-use files the user takes offline. Use when
+  the user can't answer a requirements question, needs to interview the CTO/team/
+  users, or wants to prepare stakeholder interview questions.
 ---
 
 # Stakeholder Interview
 
 ## Shared resources
 
-All templates, roles, sub-agents, and references are in the `deliverable` skill directory. When reading these files, look in the sibling `deliverable/` skill folder:
+Load on demand from the sibling `deliverable/` skill folder: `roles/*.md`, `templates/*.md`, `sub-agents/*.md`, `references/*.md`.
 
-- `roles/*.md` → read from `deliverable/roles/*.md`
-- `templates/*.md` → read from `deliverable/templates/*.md`
-- `sub-agents/*.md` → read from `deliverable/sub-agents/*.md`
-- `references/*.md` → read from `deliverable/references/*.md`
+Generate structured interview templates for real stakeholders. When you don't have the answers, this skill creates the right questions — with context, examples of good answers, and space for responses. Take the template offline, interview the stakeholder, bring it back.
 
-Generate structured deliverable-interview templates for real stakeholders. When you don't have the answers, this skill creates the right questions — with context, examples of good answers, and space for responses. Take the template offline, deliverable-interview the stakeholder, bring it back.
-
-Announce at start: _"I'm using the deliverable-interview skill to prepare deliverable-interview templates for your stakeholders."_
+Announce at start: _"I'm using the deliverable-interview skill to prepare interview templates for your stakeholders."_
 
 ## When to use
 
-- "I need to ask the CTO", "prepare deliverable-interview questions", "I don't know, let me check"
-- "deliverable-interview the users", "talk to stakeholders first"
-- During any other deliverable skill when the user can't answer
-- Standalone — user wants to prepare for stakeholder conversations
+- During any other deliverable skill when the user can't answer a question
+- Standalone — user wants to prepare for stakeholder conversations before starting requirements
 
 ## Flow
 
@@ -64,7 +56,7 @@ Check context:
 
 ### Step 3: Generate template
 
-Use `templates/deliverable-interview.md` structure. Pull questions from the relevant role script's question bank. Customize:
+Use `templates/interview.md` structure. Pull questions from the relevant role script's question bank. Customize:
 
 - **Context for interviewer** — 2-3 sentences to set up the conversation
 - **Each question** includes: why we need this, what a good answer looks like, space for the answer

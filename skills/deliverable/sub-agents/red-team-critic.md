@@ -1,4 +1,4 @@
-# Sub-agent: red-team-deliverable-critic
+# Sub-agent: red-team-critic
 
 ## Scope
 

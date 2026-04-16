@@ -1,144 +1,130 @@
 # deliverable
 
-**Stop writing requirements docs that nobody reads.**
+**Stop building the wrong thing.**
 
-Most AI tools dump a 20-page BRD in one shot. It looks complete. It's not. Half the assumptions are wrong, the scope is whatever the AI imagined, and the success metrics say "improve user experience." Nobody signs off on it because nobody trusts it.
+Most AI tools dump a 20-page BRD in one shot. It looks complete. It's not. Half the
+assumptions are wrong, the scope is hallucinated, and the success metrics say "improve
+user experience." Teams build for three months and ship something nobody wanted.
 
-`deliverable` is different. It's a suite of 7 skills that sit down with you and ask hard questions — the way a good PM or BA would. Each skill handles one part of the process, works section by section with your approval, and produces documents that are evidence-backed, assumption-tagged, and ready for someone to actually build from.
+`deliverable` catches bad ideas before a single line of code gets written.
 
-## Skills
+## The Spec Trial
 
-| Skill                    | Trigger                                | What it does                                                       |
-| ------------------------ | -------------------------------------- | ------------------------------------------------------------------ |
-| `deliverable`            | any requirements request                  | Routes to the right skill based on what you need                   |
-| `deliverable-charter`        | "project charter", "initiative brief"     | Establishes business justification, vision, stakeholders, go/no-go |
-| `deliverable-brd`  | "write a BRD", "spec this feature"        | Intake, research, BRD drafting with role-based interviews          |
-| `deliverable-srs` | "write an SRS", "technical spec"          | SRS drafting — architecture, interfaces, NFRs, rollout             |
-| `deliverable-critic`    | "challenge this spec", "find holes"       | Adversarial deliverable-review against Cagan's four risks and Hyrum's Law      |
-| `deliverable-review`    | "deliverable-review requirements", "audit the BRD"   | Quality audit — completeness, consistency, measurability           |
-| `deliverable-interview`  | "prepare deliverable-interview questions"             | Generates structured deliverable-interview templates for real stakeholders     |
-| `upgrade`    | "upgrade deliverable"                     | Auto-detects install type and upgrades to latest version           |
-
-### The natural flow
+Drop in an idea. It goes on trial.
 
 ```
-deliverable-charter → deliverable-brd → deliverable-srs → deliverable-critic → deliverable-review
-                          ↑
-                  deliverable-interview (anytime)
+deliverable "AI CRM for freelancers"
 ```
 
-Each skill works independently, but they chain through shared artifacts.
+On the second run with a related idea, it surfaces what you learned last time:
+_"Memory: You evaluated 'AI CRM for freelancers' in April — verdict: Narrow. Fatal assumption: cold-start network effect. What changed?"_
+
+Three hostile voices take a run at it:
+
+- **Cynical Customer** — why wouldn't I pay for this? what's cheaper?
+- **Brutal PM** — what assumption is baked in that you haven't verified?
+- **Future Maintainer** — what breaks in 18 months?
+
+Then a synthesis produces a one-page verdict:
+
+```
+Verdict:  NARROW
+Why:      Cold-start network effect (PM + Maintainer). Freelancers won't change
+          invoice workflow for <50 contacts (Customer).
+Wedge:    Invoice follow-up automation only — no CRM, no contacts, just reminders.
+Evidence: Interview 5 freelancers who currently send manual follow-ups. Ask what
+          they'd pay to never write a follow-up email again.
+```
+
+`verdict.md` goes in your project. Every verdict is saved to `~/.deliverable/decisions.jsonl`.
+Next time you bring a similar idea, it remembers: _"You killed something like this in April
+because of cold-start. What changed?"_
 
 ## Installation
-
-### Claude Code
-
-```
-/plugin marketplace add canhta/deliverable
-/plugin install deliverable@deliverable
-```
-
-### All platforms (npx)
 
 ```bash
 npx skills add canhta/deliverable
 ```
 
-### Manual
-
-```bash
-git clone https://github.com/canhta/deliverable.git ~/.claude/skills/deliverable
-```
-
-### Other platforms
+Other platforms:
 
 | Platform       | Install path                              |
 | -------------- | ----------------------------------------- |
+| Claude Code    | `/plugin install deliverable@deliverable` |
 | Cursor         | `~/.cursor/skills/deliverable`            |
 | Codex CLI      | `~/.codex/skills/deliverable`             |
 | GitHub Copilot | `.agents/skills/deliverable` (in project) |
 | OpenCode       | `~/.opencode/skills/deliverable`          |
 
-Also available on the [Claude Skills Marketplace](https://claudemarketplaces.com/skills?search=deliverable).
+Also on the [Claude Skills Marketplace](https://claudemarketplaces.com/skills?search=deliverable).
 
-## Upgrading
+## Usage
 
-### npx (recommended)
-
-```bash
-npx skills add canhta/deliverable --yes
+**Run the trial on an idea:**
+```
+deliverable "your idea here"
 ```
 
-### Git clone installs
-
-```bash
-cd ~/.claude/skills/deliverable && git pull origin main
+**Write formal requirements after the trial:**
+```
+write a BRD for [the surviving wedge]
+write an SRS for [the feature]
+project charter for [the initiative]
+I need to interview the CTO before writing this spec
 ```
 
-### Inside your agent
-
-Just say "upgrade deliverable" — the upgrade skill handles it automatically.
-
-## Quick start
-
+**Upgrade:**
 ```
-> Write a BRD for our new auth system
-> Project deliverable-charter for the data platform migration
-> Technical spec for the notification service
-> Red-team this spec
-> Review the requirements
-> I need to interview the CTO about infrastructure constraints
+upgrade deliverable
 ```
 
-## How it works
+## How the memory works
 
-### Role-based interviews
+Every verdict is appended to `~/.deliverable/<project-name>/decisions.jsonl` (one directory per project, derived from the git repo name):
 
-Each skill interviews you through role lenses, playing whichever roles you're not:
+```json
+{"ts":"2026-04-16T15:16:42Z","idea":"AI CRM for freelancers","keywords":["crm","freelancer","ai","client","billing"],"verdict":"Narrow","fatal_assumptions":["cold-start network effect","freelancers won't pay > $20/mo"],"wedge":"Invoice follow-up automation only","project":"my-project"}
+```
 
-| Role           | Concern                                         |
-| -------------- | ----------------------------------------------- |
-| Sponsor        | Why now, what outcome, budget of belief         |
-| PM             | Target user, problem evidence, metrics, scope   |
-| Tech Lead      | Constraints, build/buy, scale, existing systems |
-| Designer       | Key flows, usability risks, accessibility       |
-| QA             | Acceptance criteria, edge cases, testability    |
-| SRE            | SLOs, rollout, observability, failure modes     |
-| Security/Legal | Data handling, PII, regulations                 |
+Each project gets its own directory under `~/.deliverable/` — derived from the git repo
+name. Projects never share memory. When you run the trial on a new idea, deliverable
+greps that project's history for keyword overlap and surfaces relevant prior verdicts
+before the voices start. No database, no service — just a log per project that makes
+the tool smarter over time.
 
-### Bounded sub-agents
+## The full chain (for teams with formal process)
 
-Research agents dispatched with your approval:
+```
+deliverable-charter → deliverable-brd → deliverable-srs
+                          ↑
+                  deliverable-interview (anytime)
+```
 
-- **Competitor scan** — up to 5 candidates, public info only
-- **Feasibility check** — library maturity, licensing, technical blockers
-- **Prior art** — existing solutions, patterns, lessons learned
-- **Red-team critic** — adversarial review against Cagan's four risks
-- **Dual-voice reviewer** — independent second opinion that challenges, not validates
+Each skill works independently and chains through shared artifacts in `docs/requirements/`.
+Use `deliverable --chain` to run the full sequence, or invoke individual skills directly.
 
-### Adaptive depth
+## Skills
 
-Mention credit card data, HIPAA, or regulated industry and the deliverable-srs skill automatically adds security, privacy, and compliance phases. No mode selection — it just adapts.
-
-### Presets
-
-| Preset     | Use case                      | Adjustments                                        |
-| ---------- | ----------------------------- | -------------------------------------------------- |
-| greenfield | New product, zero-to-one      | Adds market sizing, competitive landscape, pricing |
-| feature    | Feature in existing product   | Heavy integration, migration, deprecation coverage |
-| internal   | Internal tools, dev platforms | Adopter persona, API versioning emphasis           |
-| auto       | Not sure                      | Skill asks clarifying questions, proposes a preset |
-
-### Extras
-
-Opt-in at intake, generated after main phases:
-
-`prd-lite.md` · `exec-onepager.md` · `rfc.md` · `acceptance-tests.md` · `risks-register.md` · `planning-handoff.md` · `roadmap.md`
+| Skill | What it does |
+| --- | --- |
+| `deliverable` | **The Spec Trial** — judges your idea, writes verdict.md, logs to memory |
+| `deliverable-charter` | Project charter — business justification, vision, stakeholders, go/no-go |
+| `deliverable-brd` | BRD — intake, research, requirements with role-based interviews |
+| `deliverable-srs` | SRS — architecture, interfaces, NFRs, rollout |
+| `deliverable-interview` | Interview prep — structured templates for real stakeholder conversations |
+| `deliverable-upgrade` | Self-updater — auto-detects install type, upgrades to latest |
 
 ## Output
 
-All artifacts go to `docs/requirements/` in your project:
+Trial output:
+```
+verdict.md                                    ← in your project directory
+~/.deliverable/
+└── <project-name>/
+    └── decisions.jsonl                       ← per-project memory log
+```
 
+Chain output (in `docs/requirements/`):
 ```
 docs/requirements/
 ├── charter.md
@@ -156,43 +142,35 @@ docs/requirements/
 ```
 .
 ├── skills/
-│   ├── deliverable/SKILL.md              # Router
-│   ├── deliverable-charter/SKILL.md          # Charter authoring
-│   ├── deliverable-brd/SKILL.md    # BRD authoring
-│   ├── deliverable-srs/SKILL.md   # SRS authoring
-│   ├── deliverable-critic/SKILL.md      # Adversarial deliverable-review
-│   ├── deliverable-review/SKILL.md      # Quality audit
-│   ├── deliverable-interview/SKILL.md    # Interview prep
-│   ├── upgrade/SKILL.md                  # Self-updater
-│   └── deliverable/
-│       ├── templates/                     # 15 artifact templates
-│       ├── roles/                         # 7 role-deliverable-interview scripts
-│       ├── sub-agents/                    # 5 sub-agent prompt packs
-│       ├── references/                    # Cagan, Google design docs, Hyrum's Law
-│       └── bin/                           # update-check, config, slug, status, validate, reset
-├── .claude-plugin/                        # Claude Code plugin config
-├── .cursor-plugin/                        # Cursor plugin config
+│   ├── deliverable/
+│   │   ├── SKILL.md                   # Spec Trial entry point
+│   │   ├── templates/                 # Document templates
+│   │   ├── roles/                     # Role-interview scripts
+│   │   ├── sub-agents/                # Sub-agent prompt packs
+│   │   ├── references/                # Cagan, Hyrum's Law, Google design docs
+│   │   └── bin/                       # update-check, config, slug, status, validate, reset
+│   ├── deliverable-charter/SKILL.md
+│   ├── deliverable-brd/SKILL.md
+│   ├── deliverable-srs/SKILL.md
+│   ├── deliverable-interview/SKILL.md
+│   └── deliverable-upgrade/SKILL.md
+├── .claude-plugin/
+├── .cursor-plugin/
 └── LICENSE
 ```
 
 ## Inspired by
 
-- **[Superpowers](https://github.com/obra/superpowers)** by Jesse Vincent — execution DNA, progressive disclosure, section-by-section validation
-- **[gstack](https://github.com/garrytan/gstack)** by Garry Tan — role-as-reviewer, dual-voice adversarial critique, artifact persistence
-- **Marty Cagan** — [_Inspired_](https://www.amazon.com/INSPIRED-Create-Tech-Products-Customers/dp/1119387507), [_Empowered_](https://www.amazon.com/EMPOWERED-Ordinary-People-Extraordinary-Products/dp/111969129X) — discovery before delivery, the four risks framework
-- **[Software Engineering at Google](https://www.amazon.com/Software-Engineering-Google-Lessons-Programming/dp/1492082791)** — design-doc DNA, trade-offs explicit, alternatives documented
+- **[Superpowers](https://github.com/obra/superpowers)** by Jesse Vincent — execution DNA, progressive disclosure
+- **[gstack](https://github.com/garrytan/gstack)** by Garry Tan — role-as-reviewer, adversarial critique
+- **Marty Cagan** — [_Inspired_](https://www.amazon.com/INSPIRED-Create-Tech-Products-Customers/dp/1119387507) — discovery before delivery, the four risks
+- **[Software Engineering at Google](https://www.amazon.com/Software-Engineering-Google-Lessons-Programming/dp/1492082791)** — trade-offs explicit, alternatives documented
 - **Hyrum's Law** — every observable behavior becomes a dependency
 
 ## Support
 
-If this is useful, [drop a star](https://github.com/canhta/deliverable/stargazers). Found a bug? [Open an issue](https://github.com/canhta/deliverable/issues).
-
-## Contributing
-
-1. Fork the repo
-2. Create a branch
-3. Make your changes
-4. Open a PR
+[Drop a star](https://github.com/canhta/deliverable/stargazers) if this is useful.
+[Open an issue](https://github.com/canhta/deliverable/issues) if something's wrong.
 
 ## License
 

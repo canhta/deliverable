@@ -1,25 +1,19 @@
 ---
 name: deliverable-brd
 description: >-
-  Use when the user asks to write business requirements — BRD,
-  PRD, "spec this feature," "requirements for X," or any variant. Conducts
-  intake, discovery research via sub-agents, then drafts BRD section by section
-  with role-based interviews, approval gates, and stakeholder deliverable-interview handoff.
-  Produces brd.md, decisions.md, and open-questions.md.
+  Drafts business requirements (BRD/PRD) section by section through structured
+  intake, discovery research via sub-agents, role-based interviews, and approval
+  gates. Produces brd.md, decisions.md, and open-questions.md. Use when the
+  user asks for a BRD, PRD, "spec this feature," or "requirements for X."
 ---
 
 # Business Requirements (BRD)
 
 ## Shared resources
 
-All templates, roles, sub-agents, and references are in the `deliverable` skill directory. When reading these files, look in the sibling `deliverable/` skill folder:
+Load on demand from the sibling `deliverable/` skill folder: `roles/*.md`, `templates/*.md`, `sub-agents/*.md`, `references/*.md`.
 
-- `roles/*.md` → read from `deliverable/roles/*.md`
-- `templates/*.md` → read from `deliverable/templates/*.md`
-- `sub-agents/*.md` → read from `deliverable/sub-agents/*.md`
-- `references/*.md` → read from `deliverable/references/*.md`
-
-Draft business requirements through structured deliverable-interview and research. Works section by section with your approval at every step. Pushes back on vague answers. Spawns bounded sub-agents for competitive research and feasibility checks.
+Draft business requirements through structured interview and research. Works section by section with your approval at every step. Pushes back on vague answers. Spawns bounded sub-agents for competitive research and feasibility checks.
 
 Announce at start: _"I'm using the deliverable-brd skill to draft a BRD through structured phases with approval gates."_
 
@@ -29,8 +23,7 @@ NEVER draft the entire BRD in one shot. NEVER write multiple sections in a singl
 
 ## When to use
 
-- "write a BRD", "business requirements", "spec this feature", "requirements for X"
-- After deliverable-charter skill completes (if deliverable-charter was done)
+- After deliverable-charter completes (if a charter was done first)
 
 ## Phases
 

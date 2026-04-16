@@ -1,9 +1,9 @@
 ---
 name: deliverable-upgrade
 description: >-
-  Use when the user asks to upgrade, update, or get the latest
-  version of deliverable. Detects install type (git, npx, vendored), checks for
-  updates, runs the upgrade, and shows what changed.
+  Upgrades deliverable to the latest version. Detects install type (git, npx,
+  vendored), checks for updates, runs the upgrade, and shows what changed. Use
+  when the user asks to upgrade, update, or get the latest version of deliverable.
 ---
 
 # Upgrade Deliverable
@@ -109,4 +109,4 @@ Tell the user:
 
 - Install type and location
 - What changed (commit log for git, version bump for vendored)
-- _"Upgrade complete. All 8 skills updated."_
+- _"Upgrade complete. All 6 skills updated."_
