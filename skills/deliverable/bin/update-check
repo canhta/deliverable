@@ -11,10 +11,12 @@
 set -euo pipefail
 
 DELIVERABLE_DIR="${DELIVERABLE_DIR:-$(cd "$(dirname "$0")/.." && pwd)}"
+# VERSION lives at the repo/install root — three levels above bin/
+DELIVERABLE_ROOT="${DELIVERABLE_ROOT:-$(cd "$(dirname "$0")/../../.." && pwd)}"
 CONFIG_DIR="$HOME/.deliverable"
 CACHE_FILE="$CONFIG_DIR/last-update-check"
 SNOOZE_FILE="$CONFIG_DIR/update-snoozed"
-VERSION_FILE="$DELIVERABLE_DIR/VERSION"
+VERSION_FILE="$DELIVERABLE_ROOT/VERSION"
 REMOTE_URL="${DELIVERABLE_REMOTE_URL:-https://raw.githubusercontent.com/canhta/deliverable/main/VERSION}"
 
 # Force flag (busts cache + snooze)
