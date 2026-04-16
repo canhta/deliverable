@@ -26,11 +26,27 @@ Announce at start: _"Running the Spec Trial on your idea."_
 
 ### Step 1: First-run setup
 
-```bash
-"$DELIVERABLE_ROOT/skills/deliverable/bin/config" get auto_update 2>/dev/null || echo "FIRST_RUN"
+When this skill loads, the runtime prints a line like:
+```
+Base directory for this skill: /path/to/.claude/skills/deliverable/skills/deliverable
 ```
 
-Where `DELIVERABLE_ROOT` is the root of the deliverable installation (parent of `skills/`).
+Use that path as `$SKILL_BASE_DIR`. Derive `DELIVERABLE_ROOT` (two levels up) and call the config script:
+
+```bash
+# SKILL_BASE_DIR = the "Base directory for this skill:" value shown at load time
+# Example: /Users/you/.claude/skills/deliverable/skills/deliverable
+DELIVERABLE_ROOT=$(dirname "$(dirname "$SKILL_BASE_DIR")")
+CONFIG_BIN="$DELIVERABLE_ROOT/skills/deliverable/bin/config"
+"$CONFIG_BIN" get auto_update 2>/dev/null || echo "FIRST_RUN"
+```
+
+**Do NOT compute DELIVERABLE_ROOT by calling `dirname` on a guessed path. Use only the value the runtime provided.**
+
+**If the config script cannot be found or errors:**
+Stop immediately. Tell the user:
+> _"Setup failed — config script not found. Please run `/deliverable-upgrade` to repair the installation, then try again."_
+Do NOT proceed to routing or any document flow.
 
 **If `FIRST_RUN`:** Ask the user:
 
@@ -41,7 +57,7 @@ Where `DELIVERABLE_ROOT` is the root of the deliverable installation (parent of 
 
 Save with:
 ```bash
-"$DELIVERABLE_ROOT/skills/deliverable/bin/config" set auto_update <true|ask|false>
+"$CONFIG_BIN" set auto_update <true|ask|false>
 ```
 
 ### Step 2: Version check
@@ -53,6 +69,8 @@ Save with:
 - **`UPGRADE_AVAILABLE <old> <new>` + `auto_update=true`:** Invoke deliverable-upgrade automatically.
 - **`UPGRADE_AVAILABLE` + `auto_update=ask`:** Tell user version is available. Continue.
 - **No output:** Continue silently.
+
+**If the preamble (Steps 1–2) encounters any unrecoverable error, stop here. Do NOT fall through to routing.**
 
 ---
 
