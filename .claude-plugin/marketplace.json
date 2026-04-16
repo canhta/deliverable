@@ -9,7 +9,7 @@
     {
       "name": "deliverable",
       "description": "Requirements authoring suite — project charter, BRD, SRS, and stakeholder interview prep. 6 skills that chain together or work independently.",
-      "version": "1.0.0",
+      "version": "0.1.0",
       "source": "./",
       "author": { "name": "Canh Ta" },
       "license": "MIT",
