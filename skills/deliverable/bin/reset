@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Reset deliverable state (keeps artifacts, clears session state)
+# Usage: ./scripts/reset.sh [--hard]
+#   --hard: also removes docs/requirements/ artifacts
+
+set -euo pipefail
+
+SLUG=$(basename "$(pwd)")
+STATE_DIR="$HOME/.claude/projects/$SLUG/deliverable"
+
+echo "=== Deliverable Reset ==="
+
+# Clear session state
+if [ -d "$STATE_DIR" ]; then
+  rm -rf "$STATE_DIR"
+  echo "  ✓ Cleared session state: $STATE_DIR"
+else
+  echo "  · No session state found"
+fi
+
+# Hard reset: also remove artifacts
+if [ "${1:-}" = "--hard" ]; then
+  if [ -d "docs/requirements" ]; then
+    echo ""
+    echo "  WARNING: This will delete all artifacts in docs/requirements/"
+    read -p "  Continue? (y/N) " confirm
+    if [ "$confirm" = "y" ] || [ "$confirm" = "Y" ]; then
+      rm -rf "docs/requirements"
+      echo "  ✓ Removed docs/requirements/"
+    else
+      echo "  · Skipped artifact removal"
+    fi
+  fi
+fi
+
+echo ""
+echo "Done. Start fresh with: 'write a BRD for <your project>'"

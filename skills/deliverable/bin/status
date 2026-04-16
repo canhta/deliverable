@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Show the current status of deliverable artifacts
+# Usage: bin/status
+
+set -euo pipefail
+
+DOCS_DIR="docs/requirements"
+
+if [ ! -d "$DOCS_DIR" ]; then
+  echo "No docs/requirements/ found. Start a skill to create it."
+  exit 1
+fi
+
+echo "=== Deliverable Status ==="
+echo ""
+
+# Core artifacts
+for file in charter.md brd.md srs.md decisions.md open-questions.md; do
+  if [ -f "$DOCS_DIR/$file" ]; then
+    lines=$(wc -l < "$DOCS_DIR/$file" | tr -d ' ')
+    drafts=$(grep -c '\[DRAFT' "$DOCS_DIR/$file" 2>/dev/null || echo "0")
+    assumptions=$(grep -c '\[ASSUMPTION\]' "$DOCS_DIR/$file" 2>/dev/null || echo "0")
+    opens=$(grep -c '\[OPEN\]' "$DOCS_DIR/$file" 2>/dev/null || echo "0")
+    echo "  ✓ $file ($lines lines, $drafts drafts, $assumptions assumptions, $opens open)"
+  else
+    echo "  · $file (not created)"
+  fi
+done
+
+echo ""
+
+# Research
+research_count=$(find "$DOCS_DIR/research" -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+echo "  Research: $research_count files"
+
+# Interviews
+interview_count=$(find "$DOCS_DIR/interviews" -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+echo "  Interviews: $interview_count files"
+
+# Extras
+echo ""
+echo "  Extras:"
+for file in prd-lite.md exec-onepager.md rfc.md acceptance-tests.md risks-register.md planning-handoff.md roadmap.md; do
+  if [ -f "$DOCS_DIR/$file" ]; then
+    echo "    ✓ $file"
+  fi
+done
+
+echo ""
+
+# State
+SLUG=$(basename "$(pwd)")
+STATE_FILE="$HOME/.claude/projects/$SLUG/deliverable/state.md"
+if [ -f "$STATE_FILE" ]; then
+  echo "  State: $STATE_FILE"
+  grep -E '^\- \[' "$STATE_FILE" 2>/dev/null | head -20
+else
+  echo "  State: not found"
+fi

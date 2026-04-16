@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# slug — derive project slug from git remote or folder name
+#
+# Usage:
+#   eval "$(slug)"    — sets SLUG variable
+#   slug              — prints SLUG=... line
+#
+# Slug derivation:
+#   1. git remote origin URL → normalize (github.com/acme/widget → acme-widget)
+#   2. Fallback: current folder basename
+#   3. Collision: append short hash of absolute path
+set -euo pipefail
+
+SLUG=""
+
+# Try git remote
+REMOTE_URL="$(git config --get remote.origin.url 2>/dev/null || true)"
+if [ -n "$REMOTE_URL" ]; then
+  # Strip protocol, .git suffix, trailing slashes
+  SLUG="$(echo "$REMOTE_URL" | sed -E 's|^(https?://\|git@)||; s|\.git$||; s|:| |; s|/| |g' | awk '{print $(NF-1) "-" $NF}')"
+fi
+
+# Fallback to folder name
+if [ -z "$SLUG" ]; then
+  SLUG="$(basename "$(pwd)")"
+fi
+
+# Sanitize: lowercase, replace non-alphanumeric with hyphens
+SLUG="$(echo "$SLUG" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9-]/-/g' | sed 's/--*/-/g' | sed 's/^-//;s/-$//')"
+
+# Check collision
+STATE_DIR="$HOME/.claude/projects/$SLUG/deliverable"
+if [ -d "$STATE_DIR" ]; then
+  EXISTING_PATH=""
+  if [ -f "$STATE_DIR/state.md" ]; then
+    EXISTING_PATH="$(grep '^- \*\*Path\*\*:' "$STATE_DIR/state.md" 2>/dev/null | sed 's/.*: //' || true)"
+  fi
+  CURRENT_PATH="$(pwd)"
+  if [ -n "$EXISTING_PATH" ] && [ "$EXISTING_PATH" != "$CURRENT_PATH" ]; then
+    # Collision — append short hash
+    HASH="$(echo "$CURRENT_PATH" | shasum | cut -c1-6)"
+    SLUG="${SLUG}-${HASH}"
+  fi
+fi
+
+echo "SLUG=$SLUG"

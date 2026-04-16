@@ -1,0 +1,29 @@
+{
+  "name": "deliverable",
+  "description": "Requirements authoring suite for AI coding agents",
+  "owner": {
+    "name": "Canh Ta",
+    "email": "llm@seta-international.vn"
+  },
+  "plugins": [
+    {
+      "name": "deliverable",
+      "description": "Requirements authoring suite — project charter, BRD, SRS, red-team review, quality audit, and stakeholder interview prep. 7 skills that chain together or work independently.",
+      "version": "1.0.0",
+      "source": "./",
+      "author": { "name": "Canh Ta" },
+      "license": "MIT",
+      "tags": [
+        "requirements",
+        "brd",
+        "srs",
+        "prd",
+        "rfc",
+        "charter",
+        "roadmap",
+        "spec",
+        "design-doc"
+      ]
+    }
+  ]
+}

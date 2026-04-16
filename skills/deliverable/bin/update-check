@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+# update-check — periodic version check for deliverable skills.
+#
+# Output (one line, or nothing):
+#   UPGRADE_AVAILABLE <old> <new>  — remote VERSION differs from local
+#   (nothing)                      — up to date, snoozed, or disabled
+#
+# Env overrides (for testing):
+#   DELIVERABLE_DIR        — override auto-detected root
+#   DELIVERABLE_REMOTE_URL — override remote VERSION URL
+set -euo pipefail
+
+DELIVERABLE_DIR="${DELIVERABLE_DIR:-$(cd "$(dirname "$0")/.." && pwd)}"
+CONFIG_DIR="$HOME/.deliverable"
+CACHE_FILE="$CONFIG_DIR/last-update-check"
+SNOOZE_FILE="$CONFIG_DIR/update-snoozed"
+VERSION_FILE="$DELIVERABLE_DIR/VERSION"
+REMOTE_URL="${DELIVERABLE_REMOTE_URL:-https://raw.githubusercontent.com/canhta/deliverable/main/VERSION}"
+
+# Force flag (busts cache + snooze)
+if [ "${1:-}" = "--force" ]; then
+  rm -f "$CACHE_FILE" "$SNOOZE_FILE"
+fi
+
+# Check if updates are disabled
+AUTO_UPDATE=$("$DELIVERABLE_DIR/bin/config" get auto_update 2>/dev/null || echo "ask")
+if [ "$AUTO_UPDATE" = "false" ]; then
+  exit 0
+fi
+
+# Read local version
+LOCAL=""
+if [ -f "$VERSION_FILE" ]; then
+  LOCAL="$(tr -d '[:space:]' < "$VERSION_FILE")"
+fi
+if [ -z "$LOCAL" ]; then
+  exit 0
+fi
+
+# Check snooze
+if [ -f "$SNOOZE_FILE" ]; then
+  SNOOZED_VER="$(awk '{print $1}' "$SNOOZE_FILE" 2>/dev/null || true)"
+  SNOOZED_EPOCH="$(awk '{print $2}' "$SNOOZE_FILE" 2>/dev/null || true)"
+  NOW="$(date +%s)"
+  # Snooze for 24 hours
+  EXPIRES=$(( ${SNOOZED_EPOCH:-0} + 86400 ))
+  if [ -n "$SNOOZED_VER" ] && [ "$NOW" -lt "$EXPIRES" ]; then
+    exit 0
+  fi
+fi
+
+# Check cache (60 min TTL)
+if [ -f "$CACHE_FILE" ]; then
+  STALE=$(find "$CACHE_FILE" -mmin +60 2>/dev/null || true)
+  if [ -z "$STALE" ]; then
+    CACHED="$(cat "$CACHE_FILE" 2>/dev/null || true)"
+    case "$CACHED" in
+      UP_TO_DATE*) exit 0 ;;
+      UPGRADE_AVAILABLE*) echo "$CACHED"; exit 0 ;;
+    esac
+  fi
+fi
+
+# Fetch remote version
+mkdir -p "$CONFIG_DIR"
+REMOTE="$(curl -sf --max-time 3 "$REMOTE_URL" 2>/dev/null || true)"
+REMOTE="$(echo "$REMOTE" | tr -d '[:space:]')"
+
+# Validate
+if ! echo "$REMOTE" | grep -qE '^[0-9]+\.[0-9.]+$'; then
+  echo "UP_TO_DATE $LOCAL" > "$CACHE_FILE"
+  exit 0
+fi
+
+if [ "$LOCAL" = "$REMOTE" ]; then
+  echo "UP_TO_DATE $LOCAL" > "$CACHE_FILE"
+  exit 0
+fi
+
+# Update available
+echo "UPGRADE_AVAILABLE $LOCAL $REMOTE" > "$CACHE_FILE"
+echo "UPGRADE_AVAILABLE $LOCAL $REMOTE"

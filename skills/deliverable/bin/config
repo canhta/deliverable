@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# config — read/write ~/.deliverable/config
+#
+# Usage:
+#   config get <key>          — read a config value
+#   config set <key> <value>  — write a config value
+#   config list               — show all config
+#
+# Config file format: key=value (one per line)
+set -euo pipefail
+
+CONFIG_DIR="$HOME/.deliverable"
+CONFIG_FILE="$CONFIG_DIR/config"
+
+cmd="${1:-}"
+key="${2:-}"
+value="${3:-}"
+
+case "$cmd" in
+  get)
+    if [ -z "$key" ]; then
+      echo "Usage: config get <key>" >&2
+      exit 1
+    fi
+    if [ -f "$CONFIG_FILE" ]; then
+      grep "^${key}=" "$CONFIG_FILE" 2>/dev/null | cut -d= -f2- || true
+    fi
+    ;;
+
+  set)
+    if [ -z "$key" ] || [ -z "$value" ]; then
+      echo "Usage: config set <key> <value>" >&2
+      exit 1
+    fi
+    mkdir -p "$CONFIG_DIR"
+    if [ -f "$CONFIG_FILE" ] && grep -q "^${key}=" "$CONFIG_FILE" 2>/dev/null; then
+      # Update existing key
+      sed -i.bak "s|^${key}=.*|${key}=${value}|" "$CONFIG_FILE"
+      rm -f "$CONFIG_FILE.bak"
+    else
+      # Append new key
+      echo "${key}=${value}" >> "$CONFIG_FILE"
+    fi
+    ;;
+
+  list)
+    if [ -f "$CONFIG_FILE" ]; then
+      cat "$CONFIG_FILE"
+    else
+      echo "(no config file)"
+    fi
+    ;;
+
+  *)
+    echo "Usage: config <get|set|list> [key] [value]" >&2
+    exit 1
+    ;;
+esac

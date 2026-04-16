@@ -1,0 +1,19 @@
+{
+  "name": "deliverable",
+  "displayName": "Deliverable",
+  "description": "Requirements authoring suite — project charter, BRD, SRS, red-team review, quality audit, and stakeholder interview prep",
+  "version": "1.0.0",
+  "author": { "name": "Canh Ta" },
+  "license": "MIT",
+  "keywords": [
+    "requirements",
+    "brd",
+    "srs",
+    "prd",
+    "rfc",
+    "spec",
+    "charter",
+    "roadmap"
+  ],
+  "skills": "./skills/"
+}

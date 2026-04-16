@@ -1,0 +1,611 @@
+#!/usr/bin/env python3
+"""
+excel-export — Generate professional Excel deliverables from JSON data.
+
+Usage:
+    bin/excel-export charter  <data.json> [output.xlsx]
+    bin/excel-export roadmap  <data.json> [output.xlsx]
+
+Output defaults to docs/requirements/charter.xlsx or docs/requirements/roadmap.xlsx.
+"""
+
+import sys
+import json
+import os
+from datetime import datetime
+
+# ---------------------------------------------------------------------------
+# Dependency check
+# ---------------------------------------------------------------------------
+
+try:
+    import openpyxl
+    from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
+    from openpyxl.utils import get_column_letter
+except ImportError:
+    print("Error: openpyxl is required. Install it with: pip install openpyxl")
+    sys.exit(1)
+
+# ---------------------------------------------------------------------------
+# Colour palette
+# ---------------------------------------------------------------------------
+
+C = {
+    "primary":       "1F4E79",   # dark navy — top headers
+    "secondary":     "2E75B6",   # medium blue — section headers
+    "accent":        "BDD7EE",   # pale blue — sub-headers / alternating row A
+    "white":         "FFFFFF",
+    "light_grey":    "F5F5F5",   # alternating row B
+    "mid_grey":      "D9D9D9",   # borders
+    "dark_text":     "1A1A1A",
+    "white_text":    "FFFFFF",
+    "dev_bg":        "C6EFCE",   # D cell — green tint
+    "dev_fg":        "276221",
+    "rel_bg":        "DDEBF7",   # R cell — blue tint
+    "rel_fg":        "1F4E79",
+    "tbd_bg":        "FFEB9C",   # TBD cell — amber tint
+    "tbd_fg":        "9C6500",
+}
+
+def fill(hex_color):
+    return PatternFill("solid", fgColor=hex_color)
+
+def font(bold=False, color="1A1A1A", size=10, italic=False):
+    return Font(bold=bold, color=color, size=size, italic=italic,
+                name="Calibri")
+
+def align(h="left", v="center", wrap=False):
+    return Alignment(horizontal=h, vertical=v, wrap_text=wrap)
+
+def border(style="thin", color="D9D9D9"):
+    s = Side(style=style, color=color)
+    return Border(left=s, right=s, top=s, bottom=s)
+
+def thin_border():
+    return border("thin", C["mid_grey"])
+
+# ---------------------------------------------------------------------------
+# Shared helpers
+# ---------------------------------------------------------------------------
+
+def set_col_width(ws, col, width):
+    ws.column_dimensions[get_column_letter(col)].width = width
+
+def write_title_block(ws, title, subtitle=""):
+    """Write a full-width banner title at the top of the sheet."""
+    ws.merge_cells("A1:Z1")
+    c = ws["A1"]
+    c.value = title
+    c.fill = fill(C["primary"])
+    c.font = font(bold=True, color=C["white_text"], size=16)
+    c.alignment = align("center", "center")
+    ws.row_dimensions[1].height = 36
+
+    if subtitle:
+        ws.merge_cells("A2:Z2")
+        c = ws["A2"]
+        c.value = subtitle
+        c.fill = fill(C["secondary"])
+        c.font = font(color=C["white_text"], size=10, italic=True)
+        c.alignment = align("center", "center")
+        ws.row_dimensions[2].height = 20
+        return 3
+    return 2
+
+
+def write_section_header(ws, row, text, col_span=6, level=1):
+    """Write a coloured section header spanning col_span columns."""
+    end_col = get_column_letter(col_span)
+    ws.merge_cells(f"A{row}:{end_col}{row}")
+    c = ws[f"A{row}"]
+    c.value = text
+    if level == 1:
+        c.fill = fill(C["secondary"])
+        c.font = font(bold=True, color=C["white_text"], size=11)
+    else:
+        c.fill = fill(C["accent"])
+        c.font = font(bold=True, color=C["dark_text"], size=10)
+    c.alignment = align("left", "center")
+    ws.row_dimensions[row].height = 22
+    return row + 1
+
+
+def write_table_header(ws, row, headers, col_widths=None):
+    """Write a styled table header row."""
+    for i, h in enumerate(headers, 1):
+        c = ws.cell(row=row, column=i, value=h)
+        c.fill = fill(C["accent"])
+        c.font = font(bold=True, color=C["dark_text"], size=9)
+        c.alignment = align("center", "center", wrap=True)
+        c.border = thin_border()
+        if col_widths and i <= len(col_widths):
+            set_col_width(ws, i, col_widths[i - 1])
+    ws.row_dimensions[row].height = 18
+    return row + 1
+
+
+def write_table_row(ws, row, values, alt=False, bold=False, wrap_cols=None):
+    """Write a data row with alternating fill."""
+    bg = C["light_grey"] if alt else C["white"]
+    for i, v in enumerate(values, 1):
+        c = ws.cell(row=row, column=i, value=v or "")
+        c.fill = fill(bg)
+        c.font = font(bold=bold, size=9)
+        wrap = wrap_cols and i in wrap_cols
+        c.alignment = align("left", "top", wrap=wrap)
+        c.border = thin_border()
+    ws.row_dimensions[row].height = 15
+    return row + 1
+
+
+def write_kv_table(ws, row, pairs, label_col_width=28, value_col_width=50):
+    """Write a two-column key-value block."""
+    set_col_width(ws, 1, label_col_width)
+    set_col_width(ws, 2, value_col_width)
+    for i, (k, v) in enumerate(pairs):
+        alt = i % 2 == 1
+        lc = ws.cell(row=row, column=1, value=k)
+        lc.fill = fill(C["light_grey"] if alt else C["white"])
+        lc.font = font(bold=True, size=9)
+        lc.alignment = align("left", "center")
+        lc.border = thin_border()
+
+        vc = ws.cell(row=row, column=2, value=v or "")
+        vc.fill = fill(C["light_grey"] if alt else C["white"])
+        vc.font = font(size=9)
+        vc.alignment = align("left", "center", wrap=True)
+        vc.border = thin_border()
+        row += 1
+    return row
+
+
+def blank_row(ws, row, height=8):
+    ws.row_dimensions[row].height = height
+    return row + 1
+
+# ---------------------------------------------------------------------------
+# Charter generator
+# ---------------------------------------------------------------------------
+
+def generate_charter(data: dict, output_path: str):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Project Charter"
+    ws.sheet_view.showGridLines = False
+
+    project_name = data.get("project_name", "Unnamed Project")
+    generated = data.get("date", datetime.today().strftime("%Y-%m-%d"))
+    row = write_title_block(ws, f"Project Charter — {project_name}",
+                            f"Generated: {generated}  |  Version: {data.get('version', '1.0')}")
+    row = blank_row(ws, row)
+
+    COL_SPAN = 6
+
+    # -----------------------------------------------------------------------
+    # 1. Project Summary
+    # -----------------------------------------------------------------------
+    row = write_section_header(ws, row, "1.  Project Summary", COL_SPAN)
+    summary = data.get("project_summary", {})
+    pairs = [
+        ("Project Name",         summary.get("project_name", project_name)),
+        ("Client",               summary.get("client", "")),
+        ("Project Manager",      summary.get("project_manager", "")),
+        ("PMO",                  summary.get("pmo", "")),
+        ("Client Representative",summary.get("client_representative", "")),
+        ("Start Date",           summary.get("start_date", "")),
+        ("End Date",             summary.get("end_date", "")),
+        ("Effort (person-days)", summary.get("effort", "")),
+    ]
+    row = write_kv_table(ws, row, pairs)
+    row = blank_row(ws, row)
+
+    # -----------------------------------------------------------------------
+    # 2. Project Organisation Chart
+    # -----------------------------------------------------------------------
+    row = write_section_header(ws, row, "2.  Project Organisation Chart", COL_SPAN)
+    org = data.get("org_chart", [])
+    if org:
+        row = write_table_header(ws, row, ["Name", "Role", "Reports To"],
+                                 col_widths=[28, 28, 28])
+        for i, member in enumerate(org):
+            row = write_table_row(ws, row,
+                [member.get("name", ""), member.get("role", ""),
+                 member.get("reports_to", "")], alt=i % 2 == 1)
+    else:
+        ws.cell(row=row, column=1).value = "(no org chart data provided)"
+        ws.cell(row=row, column=1).font = font(italic=True, size=9)
+        row += 1
+    row = blank_row(ws, row)
+
+    # -----------------------------------------------------------------------
+    # 3. Roles & Responsibilities
+    # -----------------------------------------------------------------------
+    row = write_section_header(ws, row, "3.  Roles & Responsibilities", COL_SPAN)
+    roles = data.get("roles", [])
+    if roles:
+        set_col_width(ws, 1, 28)
+        set_col_width(ws, 2, 70)
+        row = write_table_header(ws, row, ["Role", "Responsibilities"],
+                                 col_widths=[28, 70])
+        for i, r in enumerate(roles):
+            resps = r.get("responsibilities", [])
+            text = "\n".join(f"• {x}" for x in resps) if resps else ""
+            vals = [r.get("role", ""), text]
+            ws.cell(row=row, column=1, value=vals[0])
+            ws.cell(row=row, column=2, value=vals[1])
+            bg = C["light_grey"] if i % 2 == 1 else C["white"]
+            for col in [1, 2]:
+                c = ws.cell(row=row, column=col)
+                c.fill = fill(bg)
+                c.font = font(size=9)
+                c.border = thin_border()
+                c.alignment = align("left", "top", wrap=True)
+            line_count = max(1, len(resps))
+            ws.row_dimensions[row].height = max(15, line_count * 14)
+            row += 1
+    row = blank_row(ws, row)
+
+    # -----------------------------------------------------------------------
+    # 4. Scope
+    # -----------------------------------------------------------------------
+    row = write_section_header(ws, row, "4.  Scope", COL_SPAN)
+    ws.merge_cells(f"A{row}:F{row}")
+    c = ws.cell(row=row, column=1, value=data.get("scope", ""))
+    c.font = font(size=9)
+    c.alignment = align("left", "top", wrap=True)
+    c.border = thin_border()
+    ws.row_dimensions[row].height = 60
+    row += 1
+    row = blank_row(ws, row)
+
+    # -----------------------------------------------------------------------
+    # 5. Constraints & Assumptions
+    # -----------------------------------------------------------------------
+    row = write_section_header(ws, row, "5.  Constraints & Assumptions", COL_SPAN)
+    row = write_section_header(ws, row, "5.1  Constraints", COL_SPAN, level=2)
+    ws.merge_cells(f"A{row}:F{row}")
+    c = ws.cell(row=row, column=1, value=data.get("constraints", ""))
+    c.font = font(size=9); c.alignment = align("left", "top", wrap=True)
+    c.border = thin_border()
+    ws.row_dimensions[row].height = 50
+    row += 1
+    row = blank_row(ws, row)
+
+    row = write_section_header(ws, row, "5.2  Assumptions", COL_SPAN, level=2)
+    ws.merge_cells(f"A{row}:F{row}")
+    c = ws.cell(row=row, column=1, value=data.get("assumptions", ""))
+    c.font = font(size=9); c.alignment = align("left", "top", wrap=True)
+    c.border = thin_border()
+    ws.row_dimensions[row].height = 50
+    row += 1
+    row = blank_row(ws, row)
+
+    # -----------------------------------------------------------------------
+    # 6. Risk Log
+    # -----------------------------------------------------------------------
+    row = write_section_header(ws, row, "6.  Initial Risk Log", COL_SPAN)
+    ws.merge_cells(f"A{row}:F{row}")
+    c = ws.cell(row=row, column=1, value=data.get("risks", ""))
+    c.font = font(size=9); c.alignment = align("left", "top", wrap=True)
+    c.border = thin_border()
+    ws.row_dimensions[row].height = 60
+    row += 1
+    row = blank_row(ws, row)
+
+    # -----------------------------------------------------------------------
+    # 7. Training Plan
+    # -----------------------------------------------------------------------
+    row = write_section_header(ws, row, "7.  Training Plan", COL_SPAN)
+    training = data.get("training_plan", [])
+    if training:
+        row = write_table_header(ws, row,
+            ["Training Area", "Trainer", "Participants", "When"],
+            col_widths=[30, 20, 30, 20])
+        for i, t in enumerate(training):
+            row = write_table_row(ws, row,
+                [t.get("area",""), t.get("trainer",""),
+                 t.get("participants",""), t.get("when","")],
+                alt=i % 2 == 1, wrap_cols={1, 3})
+    else:
+        ws.cell(row=row, column=1).value = "(no training plan provided)"
+        ws.cell(row=row, column=1).font = font(italic=True, size=9)
+        row += 1
+    row = blank_row(ws, row)
+
+    # -----------------------------------------------------------------------
+    # 8. Working Environments
+    # -----------------------------------------------------------------------
+    row = write_section_header(ws, row, "8.  Working Environments", COL_SPAN)
+    envs = data.get("environments", [])
+    if envs:
+        row = write_table_header(ws, row, ["Resource", "Details"],
+                                 col_widths=[30, 70])
+        for i, e in enumerate(envs):
+            row = write_table_row(ws, row,
+                [e.get("resource",""), e.get("note","")],
+                alt=i % 2 == 1, wrap_cols={2})
+    else:
+        ws.cell(row=row, column=1).value = "(no environment data provided)"
+        ws.cell(row=row, column=1).font = font(italic=True, size=9)
+        row += 1
+    row = blank_row(ws, row)
+
+    # -----------------------------------------------------------------------
+    # 9. Communication Plan
+    # -----------------------------------------------------------------------
+    row = write_section_header(ws, row, "9.  Communication Plan", COL_SPAN)
+
+    # Meetings
+    row = write_section_header(ws, row, "9.1  Recurring Meetings", COL_SPAN, level=2)
+    meetings = data.get("meetings", [])
+    if meetings:
+        row = write_table_header(ws, row,
+            ["Meeting", "Purpose", "Frequency", "Attendees", "Agenda"],
+            col_widths=[22, 35, 18, 28, 35])
+        for i, m in enumerate(meetings):
+            row = write_table_row(ws, row,
+                [m.get("name",""), m.get("purpose",""), m.get("frequency",""),
+                 m.get("attendees",""), m.get("agenda","")],
+                alt=i % 2 == 1, wrap_cols={2, 4, 5})
+    else:
+        ws.cell(row=row, column=1).value = "(no meeting schedule provided)"
+        ws.cell(row=row, column=1).font = font(italic=True, size=9)
+        row += 1
+    row = blank_row(ws, row)
+
+    # Reports
+    row = write_section_header(ws, row, "9.2  Reporting", COL_SPAN, level=2)
+    reports = data.get("reports", [])
+    if reports:
+        row = write_table_header(ws, row,
+            ["Report", "Description", "Sender", "Receiver", "Tool / Channel"],
+            col_widths=[22, 40, 18, 28, 22])
+        for i, r in enumerate(reports):
+            row = write_table_row(ws, row,
+                [r.get("name",""), r.get("description",""), r.get("sender",""),
+                 r.get("receiver",""), r.get("tool","")],
+                alt=i % 2 == 1, wrap_cols={2, 4})
+    else:
+        ws.cell(row=row, column=1).value = "(no reporting schedule provided)"
+        ws.cell(row=row, column=1).font = font(italic=True, size=9)
+        row += 1
+
+    # -----------------------------------------------------------------------
+    # Sheet chrome
+    # -----------------------------------------------------------------------
+    ws.freeze_panes = "A3"
+    ws.print_title_rows = "1:2"
+    ws.page_setup.orientation = "landscape"
+    ws.page_setup.fitToPage = True
+    ws.page_setup.fitToWidth = 1
+
+    wb.save(output_path)
+    print(f"Charter written to {output_path}")
+
+
+# ---------------------------------------------------------------------------
+# Roadmap generator
+# ---------------------------------------------------------------------------
+
+def generate_roadmap(data: dict, output_path: str):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Roadmap"
+    ws.sheet_view.showGridLines = False
+
+    project_name = data.get("project_name", "Unnamed Project")
+    generated = data.get("date", datetime.today().strftime("%Y-%m-%d"))
+
+    sprints = data.get("sprints", [])          # [{name, dates}]
+    releases = data.get("releases", [])        # [{name, sprint}]  (optional)
+    features = data.get("features", [])        # [{tool, element, sub_element, timeline}]
+
+    sprint_names = [s["name"] for s in sprints]
+
+    # --- Column layout ---
+    # Col A: Tool
+    # Col B: Element
+    # Col C: Sub-element
+    # Col D+: one per sprint
+
+    FIXED_COLS = 3
+    total_cols = FIXED_COLS + len(sprint_names)
+
+    # Row 1 — title banner
+    last_col_letter = get_column_letter(total_cols)
+    ws.merge_cells(f"A1:{last_col_letter}1")
+    c = ws["A1"]
+    c.value = f"Roadmap — {project_name}"
+    c.fill = fill(C["primary"])
+    c.font = font(bold=True, color=C["white_text"], size=14)
+    c.alignment = align("center", "center")
+    ws.row_dimensions[1].height = 30
+
+    # Row 2 — subtitle + dates
+    ws.merge_cells("A2:C2")
+    ws.cell(row=2, column=1, value=f"Generated: {generated}").font = font(
+        italic=True, size=9, color=C["white_text"])
+    ws.cell(row=2, column=1).fill = fill(C["secondary"])
+    ws.cell(row=2, column=1).alignment = align("center", "center")
+
+    for i, sprint in enumerate(sprints):
+        col = FIXED_COLS + 1 + i
+        c = ws.cell(row=2, column=col, value=sprint.get("dates", ""))
+        c.fill = fill(C["secondary"])
+        c.font = font(size=8, color=C["white_text"])
+        c.alignment = align("center", "center", wrap=True)
+        c.border = thin_border()
+    ws.row_dimensions[2].height = 28
+
+    # Row 3 — releases (optional row — only if releases provided)
+    HEADER_ROW = 3
+    if releases:
+        ws.merge_cells("A3:C3")
+        ws.cell(row=3, column=1, value="Releases").fill = fill(C["accent"])
+        ws.cell(row=3, column=1).font = font(bold=True, size=9)
+        ws.cell(row=3, column=1).alignment = align("center", "center")
+
+        release_by_sprint = {}
+        for r in releases:
+            release_by_sprint[r["sprint"]] = r["name"]
+
+        for i, sprint_name in enumerate(sprint_names):
+            col = FIXED_COLS + 1 + i
+            release_name = release_by_sprint.get(sprint_name, "")
+            c = ws.cell(row=3, column=col, value=release_name)
+            c.fill = fill(C["accent"])
+            c.font = font(size=8, bold=bool(release_name))
+            c.alignment = align("center", "center")
+            c.border = thin_border()
+        ws.row_dimensions[3].height = 18
+        HEADER_ROW = 4
+
+    # Sprint name header row
+    ws.merge_cells(f"A{HEADER_ROW}:C{HEADER_ROW}")
+    ws.cell(row=HEADER_ROW, column=1, value="Tool / Feature")
+    ws.cell(row=HEADER_ROW, column=1).fill = fill(C["accent"])
+    ws.cell(row=HEADER_ROW, column=1).font = font(bold=True, size=9)
+    ws.cell(row=HEADER_ROW, column=1).alignment = align("center", "center")
+
+    for i, sprint in enumerate(sprints):
+        col = FIXED_COLS + 1 + i
+        c = ws.cell(row=HEADER_ROW, column=col, value=sprint["name"])
+        c.fill = fill(C["accent"])
+        c.font = font(bold=True, size=8)
+        c.alignment = align("center", "center", wrap=True)
+        c.border = thin_border()
+    ws.row_dimensions[HEADER_ROW].height = 22
+
+    DATA_START = HEADER_ROW + 1
+
+    # Feature rows
+    current_tool = None
+    tool_color_toggle = False
+
+    for idx, feature in enumerate(features):
+        row = DATA_START + idx
+        tool = feature.get("tool", "")
+        element = feature.get("element", "")
+        sub_element = feature.get("sub_element", "")
+        timeline = feature.get("timeline", {})
+
+        # Track tool group changes for alternating shading
+        is_new_tool = tool != current_tool
+        if is_new_tool:
+            current_tool = tool
+            tool_color_toggle = not tool_color_toggle
+
+        bg = C["light_grey"] if tool_color_toggle else C["white"]
+
+        # Col A — tool label only on first row of each group
+        ca = ws.cell(row=row, column=1, value=tool if is_new_tool else "")
+        ca.fill = fill(C["accent"] if is_new_tool else bg)
+        ca.font = font(bold=is_new_tool, size=9)
+        ca.alignment = align("left", "center")
+        ca.border = thin_border()
+
+        # Col B — element
+        cb = ws.cell(row=row, column=2, value=element)
+        cb.fill = fill(bg)
+        cb.font = font(size=9)
+        cb.alignment = align("left", "center", wrap=True)
+        cb.border = thin_border()
+
+        # Col C — sub-element
+        cc = ws.cell(row=row, column=3, value=sub_element or "")
+        cc.fill = fill(bg)
+        cc.font = font(size=9, italic=bool(sub_element))
+        cc.alignment = align("left", "center", wrap=True)
+        cc.border = thin_border()
+
+        # Sprint columns
+        for i, sprint_name in enumerate(sprint_names):
+            col = FIXED_COLS + 1 + i
+            status = timeline.get(sprint_name, None)
+            c = ws.cell(row=row, column=col, value=status or "")
+            c.alignment = align("center", "center")
+            c.border = thin_border()
+            if status == "D":
+                c.fill = fill(C["dev_bg"])
+                c.font = font(bold=True, color=C["dev_fg"], size=9)
+            elif status == "R":
+                c.fill = fill(C["rel_bg"])
+                c.font = font(bold=True, color=C["rel_fg"], size=9)
+            elif status and status.upper() == "TBD":
+                c.fill = fill(C["tbd_bg"])
+                c.font = font(bold=False, color=C["tbd_fg"], size=9)
+            else:
+                c.fill = fill(bg)
+
+        ws.row_dimensions[row].height = 16
+
+    # Column widths
+    set_col_width(ws, 1, 22)   # Tool
+    set_col_width(ws, 2, 32)   # Element
+    set_col_width(ws, 3, 26)   # Sub-element
+    sprint_col_w = max(8, min(14, 120 // max(len(sprint_names), 1)))
+    for i in range(len(sprint_names)):
+        set_col_width(ws, FIXED_COLS + 1 + i, sprint_col_w)
+
+    # Legend
+    legend_row = DATA_START + len(features) + 2
+    ws.cell(row=legend_row, column=1, value="Legend:").font = font(bold=True, size=9)
+    for col, (label, bg, fg) in enumerate([
+        ("D = Development", C["dev_bg"], C["dev_fg"]),
+        ("R = Release",     C["rel_bg"], C["rel_fg"]),
+        ("TBD = To Be Confirmed", C["tbd_bg"], C["tbd_fg"]),
+    ], 2):
+        c = ws.cell(row=legend_row, column=col, value=label)
+        c.fill = fill(bg)
+        c.font = font(bold=True, color=fg, size=9)
+        c.border = thin_border()
+        c.alignment = align("center", "center")
+
+    # Freeze panes after header rows + fixed cols
+    ws.freeze_panes = ws.cell(row=DATA_START, column=FIXED_COLS + 1)
+    ws.print_title_rows = f"1:{HEADER_ROW}"
+    ws.page_setup.orientation = "landscape"
+    ws.page_setup.fitToPage = True
+    ws.page_setup.fitToWidth = 1
+
+    wb.save(output_path)
+    print(f"Roadmap written to {output_path}")
+
+
+# ---------------------------------------------------------------------------
+# Entry point
+# ---------------------------------------------------------------------------
+
+def main():
+    if len(sys.argv) < 3:
+        print(__doc__)
+        sys.exit(1)
+
+    doc_type = sys.argv[1].lower()
+    json_path = sys.argv[2]
+
+    if not os.path.isfile(json_path):
+        print(f"Error: data file not found: {json_path}")
+        sys.exit(1)
+
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    # Resolve output path
+    if len(sys.argv) >= 4:
+        output_path = sys.argv[3]
+    else:
+        os.makedirs("docs/requirements", exist_ok=True)
+        output_path = f"docs/requirements/{doc_type}.xlsx"
+
+    if doc_type == "charter":
+        generate_charter(data, output_path)
+    elif doc_type == "roadmap":
+        generate_roadmap(data, output_path)
+    else:
+        print(f"Error: unknown document type '{doc_type}'. Use 'charter' or 'roadmap'.")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# Validate deliverable artifacts for common issues
+# Usage: ./scripts/validate.sh
+
+set -euo pipefail
+
+DOCS_DIR="docs/requirements"
+ERRORS=0
+WARNINGS=0
+
+if [ ! -d "$DOCS_DIR" ]; then
+  echo "No docs/requirements/ found."
+  exit 1
+fi
+
+echo "=== Deliverable Validation ==="
+echo ""
+
+# Check for remaining drafts
+drafts=$(grep -rl '\[DRAFT' "$DOCS_DIR"/*.md 2>/dev/null || true)
+if [ -n "$drafts" ]; then
+  echo "  ✗ Unfinished drafts:"
+  echo "$drafts" | while read -r f; do
+    count=$(grep -c '\[DRAFT' "$f")
+    echo "    $f ($count sections)"
+  done
+  ERRORS=$((ERRORS + 1))
+  echo ""
+fi
+
+# Check for orphaned assumptions (in docs but not in open-questions)
+if [ -f "$DOCS_DIR/open-questions.md" ]; then
+  for file in "$DOCS_DIR"/brd.md "$DOCS_DIR"/srs.md "$DOCS_DIR"/charter.md; do
+    if [ -f "$file" ]; then
+      assumptions=$(grep -c '\[ASSUMPTION\]' "$file" 2>/dev/null || echo "0")
+      if [ "$assumptions" -gt 0 ]; then
+        echo "  ! $file has $assumptions [ASSUMPTION] tags — verify each has an entry in open-questions.md"
+        WARNINGS=$((WARNINGS + 1))
+      fi
+    fi
+  done
+  echo ""
+fi
+
+# Check for empty sections
+for file in "$DOCS_DIR"/*.md; do
+  if [ -f "$file" ]; then
+    empty=$(grep -cE '^## ' "$file" 2>/dev/null || echo "0")
+    content_lines=$(grep -cvE '^(#|>|\s*$|<!--|-->)' "$file" 2>/dev/null || echo "0")
+    if [ "$empty" -gt 0 ] && [ "$content_lines" -lt 5 ]; then
+      echo "  ✗ $file appears to have empty sections"
+      ERRORS=$((ERRORS + 1))
+    fi
+  fi
+done
+
+# Check for vague metrics
+if [ -f "$DOCS_DIR/brd.md" ]; then
+  vague=$(grep -ciE '\b(better|faster|improved|enhanced|more efficient)\b' "$DOCS_DIR/brd.md" 2>/dev/null || echo "0")
+  if [ "$vague" -gt 0 ]; then
+    echo "  ! brd.md has $vague vague adjectives — consider replacing with numbers"
+    WARNINGS=$((WARNINGS + 1))
+  fi
+fi
+
+echo ""
+echo "  Errors: $ERRORS"
+echo "  Warnings: $WARNINGS"
+
+if [ "$ERRORS" -gt 0 ]; then
+  exit 1
+fi
