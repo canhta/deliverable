@@ -1,5 +1,5 @@
 ---
-name: requirements-review
+name: review
 description: >-
   [deliverable] Use when the user asks to review, audit, or quality-check
   existing requirements documents. Scores documents across 6 dimensions:
@@ -21,12 +21,12 @@ All templates, roles, sub-agents, and references are in the `deliverable` skill 
 
 Final quality gate. Reviews all produced documents for consistency, completeness, and quality. Scores each dimension, flags failures, and offers to fix them.
 
-Announce at start: _"I'm using the requirements-review skill to audit your requirements documents."_
+Announce at start: _"I'm using the [deliverable] review skill to audit your requirements documents."_
 
 ## When to use
 
 - "review requirements", "audit the BRD", "check the docs", "quality check"
-- After requirements-critic completes
+- After critic completes
 - Anytime — works on any existing docs in `docs/requirements/`
 
 ## Prerequisites

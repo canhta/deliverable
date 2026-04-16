@@ -11,20 +11,20 @@ Most AI tools dump a 20-page BRD in one shot. It looks complete. It's not. Half 
 | Skill                    | Trigger                                | What it does                                                       |
 | ------------------------ | -------------------------------------- | ------------------------------------------------------------------ |
 | `deliverable`            | any requirements request                  | Routes to the right skill based on what you need                   |
-| `project-charter`        | "project charter", "initiative brief"     | Establishes business justification, vision, stakeholders, go/no-go |
-| `business-requirements`  | "write a BRD", "spec this feature"        | Intake, research, BRD drafting with role-based interviews          |
-| `technical-requirements` | "write an SRS", "technical spec"          | SRS drafting — architecture, interfaces, NFRs, rollout             |
-| `requirements-critic`    | "challenge this spec", "find holes"       | Adversarial review against Cagan's four risks and Hyrum's Law      |
-| `requirements-review`    | "review requirements", "audit the BRD"   | Quality audit — completeness, consistency, measurability           |
-| `stakeholder-interview`  | "prepare interview questions"             | Generates structured interview templates for real stakeholders     |
-| `deliverable-upgrade`    | "upgrade deliverable"                     | Auto-detects install type and upgrades to latest version           |
+| `charter`        | "project charter", "initiative brief"     | Establishes business justification, vision, stakeholders, go/no-go |
+| `brd`  | "write a BRD", "spec this feature"        | Intake, research, BRD drafting with role-based interviews          |
+| `srs` | "write an SRS", "technical spec"          | SRS drafting — architecture, interfaces, NFRs, rollout             |
+| `critic`    | "challenge this spec", "find holes"       | Adversarial review against Cagan's four risks and Hyrum's Law      |
+| `review`    | "review requirements", "audit the BRD"   | Quality audit — completeness, consistency, measurability           |
+| `interview`  | "prepare interview questions"             | Generates structured interview templates for real stakeholders     |
+| `upgrade`    | "upgrade deliverable"                     | Auto-detects install type and upgrades to latest version           |
 
 ### The natural flow
 
 ```
-project-charter → business-requirements → technical-requirements → requirements-critic → requirements-review
+charter → brd → srs → critic → review
                           ↑
-                  stakeholder-interview (anytime)
+                  interview (anytime)
 ```
 
 Each skill works independently, but they chain through shared artifacts.
@@ -118,7 +118,7 @@ Research agents dispatched with your approval:
 
 ### Adaptive depth
 
-Mention credit card data, HIPAA, or regulated industry and the technical-requirements skill automatically adds security, privacy, and compliance phases. No mode selection — it just adapts.
+Mention credit card data, HIPAA, or regulated industry and the srs skill automatically adds security, privacy, and compliance phases. No mode selection — it just adapts.
 
 ### Presets
 
@@ -157,12 +157,12 @@ docs/requirements/
 .
 ├── skills/
 │   ├── deliverable/SKILL.md              # Router
-│   ├── project-charter/SKILL.md          # Charter authoring
-│   ├── business-requirements/SKILL.md    # BRD authoring
-│   ├── technical-requirements/SKILL.md   # SRS authoring
-│   ├── requirements-critic/SKILL.md      # Adversarial review
-│   ├── requirements-review/SKILL.md      # Quality audit
-│   ├── stakeholder-interview/SKILL.md    # Interview prep
+│   ├── charter/SKILL.md          # Charter authoring
+│   ├── brd/SKILL.md    # BRD authoring
+│   ├── srs/SKILL.md   # SRS authoring
+│   ├── critic/SKILL.md      # Adversarial review
+│   ├── review/SKILL.md      # Quality audit
+│   ├── interview/SKILL.md    # Interview prep
 │   ├── upgrade/SKILL.md                  # Self-updater
 │   └── deliverable/
 │       ├── templates/                     # 15 artifact templates

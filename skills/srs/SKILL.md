@@ -1,5 +1,5 @@
 ---
-name: technical-requirements
+name: srs
 description: >-
   [deliverable] Use when the user asks to write technical requirements — SRS,
   technical spec, architecture doc, engineering requirements, or "how should we
@@ -21,7 +21,7 @@ All templates, roles, sub-agents, and references are in the `deliverable` skill 
 
 Draft software requirements based on an approved BRD. Covers architecture, interfaces, data, NFRs, security, compliance, and rollout — each section drafted with your approval.
 
-Announce at start: _"I'm using the technical-requirements skill to draft an SRS based on the approved BRD."_
+Announce at start: _"I'm using the [deliverable] srs skill to draft an SRS based on the approved BRD."_
 
 <HARD-GATE>
 NEVER draft the entire SRS in one shot. NEVER write multiple sections in a single turn. NEVER advance without user approval. NEVER write to disk without confirmation.
@@ -30,11 +30,11 @@ NEVER draft the entire SRS in one shot. NEVER write multiple sections in a singl
 ## When to use
 
 - "write an SRS", "technical spec", "architecture doc", "engineering requirements"
-- After business-requirements skill completes
+- After brd skill completes
 
 ## Prerequisites
 
-Reads `docs/requirements/brd.md` on start. If no BRD exists, suggest running business-requirements first.
+Reads `docs/requirements/brd.md` on start. If no BRD exists, suggest running brd first.
 
 ## Phases
 
@@ -116,7 +116,7 @@ Dispatch `sub-agents/dual-voice-reviewer.md` for independent second opinion on a
 
 ## Four-Beat Rhythm
 
-Same as business-requirements: Orient → Work → Present → Approve → Commit. One section at a time, no silent writes.
+Same as brd: Orient → Work → Present → Approve → Commit. One section at a time, no silent writes.
 
 ## Tone
 

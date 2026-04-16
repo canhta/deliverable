@@ -1,5 +1,5 @@
 ---
-name: requirements-critic
+name: critic
 description: >-
   [deliverable] Use when the user asks to challenge, stress-test, or find holes
   in existing requirements documents. Dispatches an adversarial sub-agent that
@@ -20,13 +20,13 @@ All templates, roles, sub-agents, and references are in the `deliverable` skill 
 
 Adversarial review of your requirements. Finds what's wrong, missing, or weak — then walks through each concern with you to decide: fix now, accept as risk, or defer.
 
-Announce at start: _"I'm using the requirements-critic skill to challenge your requirements and find blind spots."_
+Announce at start: _"I'm using the [deliverable] critic skill to challenge your requirements and find blind spots."_
 
 ## When to use
 
 - "red-team this", "challenge these requirements", "what's wrong with this spec"
 - "stress-test the BRD", "find holes in the SRS"
-- After technical-requirements skill completes
+- After srs skill completes
 - Anytime the user wants adversarial review of existing docs
 
 ## Prerequisites
@@ -38,7 +38,7 @@ Reads from `docs/requirements/`:
 - `decisions.md` (if exists)
 - `open-questions.md` (if exists)
 
-If no docs exist, tell the user and suggest business-requirements first.
+If no docs exist, tell the user and suggest brd first.
 
 ## Flow
 
@@ -53,7 +53,7 @@ flowchart TD
     P5 --> P4
     P6 --> P4
     P7 --> P4
-    P4 -->|all addressed| DONE[Done → suggest requirements-review]
+    P4 -->|all addressed| DONE[Done → suggest review]
 ```
 
 ### Step 1: Dispatch sub-agent

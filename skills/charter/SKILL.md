@@ -1,5 +1,5 @@
 ---
-name: project-charter
+name: charter
 description: >-
   [deliverable] Use when the user asks to write a project charter, initiative
   brief, or establish the business-level justification for a project before
@@ -20,7 +20,7 @@ All templates, roles, sub-agents, and references are in the `deliverable` skill 
 
 Establish the portfolio-level justification before diving into requirements. Answers: why are we investing in this? Who has authority? What kills this project?
 
-Announce at start: _"I'm using the project-charter skill to establish the business-level justification for this initiative."_
+Announce at start: _"I'm using the [deliverable] charter skill to establish the business-level justification for this initiative."_
 
 <HARD-GATE>
 NEVER draft the entire charter in one shot. NEVER write multiple sections in a single turn. NEVER write to disk without announcing and getting confirmation.

@@ -1,5 +1,5 @@
 ---
-name: business-requirements
+name: brd
 description: >-
   [deliverable] Use when the user asks to write business requirements — BRD,
   PRD, "spec this feature," "requirements for X," or any variant. Conducts
@@ -21,7 +21,7 @@ All templates, roles, sub-agents, and references are in the `deliverable` skill 
 
 Draft business requirements through structured interview and research. Works section by section with your approval at every step. Pushes back on vague answers. Spawns bounded sub-agents for competitive research and feasibility checks.
 
-Announce at start: _"I'm using the business-requirements skill to draft a BRD through structured phases with approval gates."_
+Announce at start: _"I'm using the [deliverable] brd skill to draft a BRD through structured phases with approval gates."_
 
 <HARD-GATE>
 NEVER draft the entire BRD in one shot. NEVER write multiple sections in a single turn. NEVER advance to the next phase without explicit user approval. NEVER write to disk without announcing and getting confirmation.
@@ -30,7 +30,7 @@ NEVER draft the entire BRD in one shot. NEVER write multiple sections in a singl
 ## When to use
 
 - "write a BRD", "business requirements", "spec this feature", "requirements for X"
-- After project-charter skill completes (if charter was done)
+- After charter skill completes (if charter was done)
 
 ## Phases
 
@@ -55,7 +55,7 @@ Five questions, one at a time:
 4. **Extras — engineering-facing** — `rfc / acceptance-tests / none`
 5. **Extras — cross-cutting** — `risks-register / planning-handoff / roadmap / none`
 
-**Auto-bump signals:** If user mentions PII, payment data, PHI, regulated industry — note in state.md for technical-requirements skill.
+**Auto-bump signals:** If user mentions PII, payment data, PHI, regulated industry — note in state.md for srs skill.
 
 ### Discovery Research
 
@@ -121,7 +121,7 @@ Orient → Work → Present → Approve/Edit/Revise/Kill → Commit.
 
 ## Interview Handoff
 
-User can't answer? Suggest the **stakeholder-interview** skill to generate templates. Pause phase, resume when answers return.
+User can't answer? Suggest the **interview** skill to generate templates. Pause phase, resume when answers return.
 
 ## Tone
 

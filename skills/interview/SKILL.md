@@ -1,5 +1,5 @@
 ---
-name: stakeholder-interview
+name: interview
 description: >-
   [deliverable] Use when the user needs to prepare interview questions for
   stakeholders, can't answer a question during requirements gathering, or says
@@ -21,7 +21,7 @@ All templates, roles, sub-agents, and references are in the `deliverable` skill 
 
 Generate structured interview templates for real stakeholders. When you don't have the answers, this skill creates the right questions — with context, examples of good answers, and space for responses. Take the template offline, interview the stakeholder, bring it back.
 
-Announce at start: _"I'm using the stakeholder-interview skill to prepare interview templates for your stakeholders."_
+Announce at start: _"I'm using the [deliverable] interview skill to prepare interview templates for your stakeholders."_
 
 ## When to use
 

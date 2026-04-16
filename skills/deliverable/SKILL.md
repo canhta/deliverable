@@ -65,13 +65,13 @@ Before routing, check for existing state:
 ```mermaid
 flowchart TD
     A[User request] --> B{What do they need?}
-    B -->|"charter", "initiative brief", "why are we doing this"| C[project-charter]
-    B -->|"BRD", "requirements", "spec this", "business requirements"| D[business-requirements]
-    B -->|"SRS", "technical spec", "architecture", "engineering spec"| E[technical-requirements]
-    B -->|"red-team", "challenge this", "what's wrong with this"| F[requirements-critic]
-    B -->|"review", "audit", "check the docs"| G[requirements-review]
-    B -->|"interview", "prepare questions", "ask stakeholders"| H[stakeholder-interview]
-    B -->|"upgrade", "update deliverable"| U[deliverable-upgrade]
+    B -->|"charter", "initiative brief", "why are we doing this"| C[charter]
+    B -->|"BRD", "requirements", "spec this", "business requirements"| D[brd]
+    B -->|"SRS", "technical spec", "architecture", "engineering spec"| E[srs]
+    B -->|"red-team", "challenge this", "what's wrong with this"| F[critic]
+    B -->|"review", "audit", "check the docs"| G[review]
+    B -->|"interview", "prepare questions", "ask stakeholders"| H[interview]
+    B -->|"upgrade", "update deliverable"| U[upgrade]
     B -->|ambiguous| I[Ask user to clarify]
 ```
 
@@ -79,25 +79,25 @@ flowchart TD
 
 | User says                               | Invoke                          | Why                                   |
 | --------------------------------------- | ------------------------------- | ------------------------------------- |
-| "Write a BRD for X"                     | **business-requirements**       | Explicit BRD request                  |
-| "Spec this feature"                     | **business-requirements**       | Feature spec = BRD                    |
-| "Requirements for X"                    | **business-requirements**       | General requirements = start with BRD |
-| "Write an SRS" / "Technical spec"       | **technical-requirements**      | Explicit SRS/tech spec                |
-| "Project charter" / "Initiative brief"  | **project-charter**             | Explicit charter                      |
-| "Plan this project properly"            | **project-charter**             | Start from the top                    |
-| "Review the requirements"               | **requirements-review**         | Review existing docs                  |
-| "Red-team this" / "Challenge this spec" | **requirements-critic**       | Adversarial review                    |
-| "I need to interview the CTO"           | **stakeholder-interview**       | Interview prep                        |
-| "upgrade deliverable" / "update"        | **deliverable-upgrade**         | Self-update                           |
-| First time, no docs exist               | Offer **project-charter** first | Start from the top for greenfield     |
+| "Write a BRD for X"                     | **brd**       | Explicit BRD request                  |
+| "Spec this feature"                     | **brd**       | Feature spec = BRD                    |
+| "Requirements for X"                    | **brd**       | General requirements = start with BRD |
+| "Write an SRS" / "Technical spec"       | **srs**      | Explicit SRS/tech spec                |
+| "Project charter" / "Initiative brief"  | **charter**             | Explicit charter                      |
+| "Plan this project properly"            | **charter**             | Start from the top                    |
+| "Review the requirements"               | **review**         | Review existing docs                  |
+| "Red-team this" / "Challenge this spec" | **critic**       | Adversarial review                    |
+| "I need to interview the CTO"           | **interview**       | Interview prep                        |
+| "upgrade deliverable" / "update"        | **upgrade**         | Self-update                           |
+| First time, no docs exist               | Offer **charter** first | Start from the top for greenfield     |
 | "Continue where we left off"            | Check `state.md`                | Resume whichever skill was active     |
 
 ### The natural flow
 
 ```
-project-charter → business-requirements → technical-requirements → requirements-critic → requirements-review
+charter → brd → srs → critic → review
                           ↑
-                  stakeholder-interview (anytime)
+                  interview (anytime)
 ```
 
 Each skill works independently, but they chain through shared artifacts in `docs/requirements/`.
@@ -139,15 +139,15 @@ Ask:
 
 > _"I can help with requirements. What would you like to do?_
 >
-> - \*Start from scratch → **project charter\***
-> - \*Write business requirements → **BRD\***
-> - \*Write technical requirements → **SRS\***
-> - \*Challenge existing requirements → **red-team review\***
-> - \*Quality check existing docs → **requirements review\***
-> - \*Prepare for stakeholder interviews → **interview templates\***"
+> - \*Start from scratch → **charter\***
+> - \*Write business requirements → **brd\***
+> - \*Write technical requirements → **srs\***
+> - \*Challenge existing requirements → **critic\***
+> - \*Quality check existing docs → **review\***
+> - \*Prepare for stakeholder interviews → **interview\***"
 
 ### Resume protocol
 
 1. Read `~/.claude/projects/<slug>/deliverable/state.md` if it exists
 2. If a skill was in progress, offer to resume
-3. If all phases complete, offer requirements-review or new project
+3. If all phases complete, offer review or new project
