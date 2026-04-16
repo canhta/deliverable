@@ -1,11 +1,11 @@
 ---
 name: business-requirements
 description: >-
-  Use when the user asks to write business requirements — BRD, PRD, "spec this
-  feature," "requirements for X," or any variant. Conducts intake, discovery
-  research via sub-agents, then drafts BRD section by section with role-based
-  interviews, approval gates, and stakeholder interview handoff. Produces
-  brd.md, decisions.md, and open-questions.md.
+  [deliverable] Use when the user asks to write business requirements — BRD,
+  PRD, "spec this feature," "requirements for X," or any variant. Conducts
+  intake, discovery research via sub-agents, then drafts BRD section by section
+  with role-based interviews, approval gates, and stakeholder interview handoff.
+  Produces brd.md, decisions.md, and open-questions.md.
 ---
 
 # Business Requirements (BRD)

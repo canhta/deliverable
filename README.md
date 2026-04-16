@@ -10,19 +10,19 @@ Most AI tools dump a 20-page BRD in one shot. It looks complete. It's not. Half 
 
 | Skill                    | Trigger                                | What it does                                                       |
 | ------------------------ | -------------------------------------- | ------------------------------------------------------------------ |
-| `deliverable`            | any requirements request               | Routes to the right skill based on what you need                   |
-| `project-charter`        | "project charter", "initiative brief"  | Establishes business justification, vision, stakeholders, go/no-go |
-| `business-requirements`  | "write a BRD", "spec this feature"     | Intake, research, BRD drafting with role-based interviews          |
-| `technical-requirements` | "write an SRS", "technical spec"       | SRS drafting — architecture, interfaces, NFRs, rollout             |
-| `requirements-red-team`  | "red-team this", "challenge this spec" | Adversarial review against Cagan's four risks and Hyrum's Law      |
-| `requirements-review`    | "review requirements", "audit the BRD" | Quality audit — completeness, consistency, measurability           |
-| `stakeholder-interview`  | "prepare interview questions"          | Generates structured interview templates for real stakeholders     |
-| `upgrade`                | "upgrade deliverable"                  | Auto-detects install type and upgrades to latest version           |
+| `deliverable`            | any requirements request                  | Routes to the right skill based on what you need                   |
+| `project-charter`        | "project charter", "initiative brief"     | Establishes business justification, vision, stakeholders, go/no-go |
+| `business-requirements`  | "write a BRD", "spec this feature"        | Intake, research, BRD drafting with role-based interviews          |
+| `technical-requirements` | "write an SRS", "technical spec"          | SRS drafting — architecture, interfaces, NFRs, rollout             |
+| `requirements-critic`    | "challenge this spec", "find holes"       | Adversarial review against Cagan's four risks and Hyrum's Law      |
+| `requirements-review`    | "review requirements", "audit the BRD"   | Quality audit — completeness, consistency, measurability           |
+| `stakeholder-interview`  | "prepare interview questions"             | Generates structured interview templates for real stakeholders     |
+| `deliverable-upgrade`    | "upgrade deliverable"                     | Auto-detects install type and upgrades to latest version           |
 
 ### The natural flow
 
 ```
-project-charter → business-requirements → technical-requirements → requirements-red-team → requirements-review
+project-charter → business-requirements → technical-requirements → requirements-critic → requirements-review
                           ↑
                   stakeholder-interview (anytime)
 ```
@@ -160,7 +160,7 @@ docs/requirements/
 │   ├── project-charter/SKILL.md          # Charter authoring
 │   ├── business-requirements/SKILL.md    # BRD authoring
 │   ├── technical-requirements/SKILL.md   # SRS authoring
-│   ├── requirements-red-team/SKILL.md    # Adversarial review
+│   ├── requirements-critic/SKILL.md      # Adversarial review
 │   ├── requirements-review/SKILL.md      # Quality audit
 │   ├── stakeholder-interview/SKILL.md    # Interview prep
 │   ├── upgrade/SKILL.md                  # Self-updater

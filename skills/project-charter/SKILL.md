@@ -1,10 +1,10 @@
 ---
 name: project-charter
 description: >-
-  Use when the user asks to write a project charter, initiative brief, or
-  establish the business-level justification for a project before diving into
-  detailed requirements. Produces charter.md with vision, objectives,
-  stakeholders, constraints, and go/no-go criteria.
+  [deliverable] Use when the user asks to write a project charter, initiative
+  brief, or establish the business-level justification for a project before
+  diving into detailed requirements. Produces charter.md with vision,
+  objectives, stakeholders, constraints, and go/no-go criteria.
 ---
 
 # Project Charter

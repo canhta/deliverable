@@ -17,7 +17,7 @@ SLUG=""
 REMOTE_URL="$(git config --get remote.origin.url 2>/dev/null || true)"
 if [ -n "$REMOTE_URL" ]; then
   # Strip protocol, .git suffix, trailing slashes
-  SLUG="$(echo "$REMOTE_URL" | sed -E 's|^(https?://\|git@)||; s|\.git$||; s|:| |; s|/| |g' | awk '{print $(NF-1) "-" $NF}')"
+  SLUG="$(echo "$REMOTE_URL" | sed -E 's|^(https?://|git@)||; s|\.git$||; s|:| |; s|/| |g' | awk '{print $(NF-1) "-" $NF}')"
 fi
 
 # Fallback to folder name

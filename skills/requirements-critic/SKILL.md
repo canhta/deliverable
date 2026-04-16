@@ -1,13 +1,13 @@
 ---
-name: requirements-red-team
+name: requirements-critic
 description: >-
-  Use when the user asks to challenge, red-team, stress-test, or find holes in
-  existing requirements documents. Dispatches an adversarial sub-agent that
+  [deliverable] Use when the user asks to challenge, stress-test, or find holes
+  in existing requirements documents. Dispatches an adversarial sub-agent that
   reviews BRD and SRS against Cagan's four risks, Hyrum's Law, and operational
   gaps. Walks through each concern with the user.
 ---
 
-# Requirements Red-Team
+# Requirements Critic
 
 ## Shared resources
 
@@ -20,7 +20,7 @@ All templates, roles, sub-agents, and references are in the `deliverable` skill 
 
 Adversarial review of your requirements. Finds what's wrong, missing, or weak — then walks through each concern with you to decide: fix now, accept as risk, or defer.
 
-Announce at start: _"I'm using the requirements-red-team skill to challenge your requirements and find blind spots."_
+Announce at start: _"I'm using the requirements-critic skill to challenge your requirements and find blind spots."_
 
 ## When to use
 

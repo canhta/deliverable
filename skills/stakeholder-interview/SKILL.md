@@ -1,10 +1,11 @@
 ---
 name: stakeholder-interview
 description: >-
-  Use when the user needs to prepare interview questions for stakeholders, can't
-  answer a question during requirements gathering, or says "I need to ask the
-  CTO / team / users." Generates structured interview templates from role
-  question banks that the user can hand to real stakeholders offline.
+  [deliverable] Use when the user needs to prepare interview questions for
+  stakeholders, can't answer a question during requirements gathering, or says
+  "I need to ask the CTO / team / users." Generates structured interview
+  templates from role question banks that the user can hand to real stakeholders
+  offline.
 ---
 
 # Stakeholder Interview

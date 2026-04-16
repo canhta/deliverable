@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Validate deliverable artifacts for common issues
-# Usage: ./scripts/validate.sh
+# Usage: bin/validate
 
 set -euo pipefail
 

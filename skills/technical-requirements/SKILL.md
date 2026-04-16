@@ -1,11 +1,11 @@
 ---
 name: technical-requirements
 description: >-
-  Use when the user asks to write technical requirements — SRS, technical spec,
-  architecture doc, engineering requirements, or "how should we build this."
-  Reads existing BRD, then drafts SRS section by section covering architecture,
-  interfaces, data, non-functional requirements, security, compliance, and
-  rollout. Produces srs.md.
+  [deliverable] Use when the user asks to write technical requirements — SRS,
+  technical spec, architecture doc, engineering requirements, or "how should we
+  build this." Reads existing BRD, then drafts SRS section by section covering
+  architecture, interfaces, data, non-functional requirements, security,
+  compliance, and rollout. Produces srs.md.
 ---
 
 # Technical Requirements (SRS)

@@ -28,15 +28,15 @@
 
 <Data classification. Required when auto-bump signals detected.>
 
-### 4.3a Compliance
+### 4.4 Compliance
 
 <Applicable regulations, evidence requirements, DPA status. Required when auto-bump signals detected. Omit entirely if no auto-bump signals.>
 
-### 4.4 Observability
+### 4.5 Observability
 
 <Logs, metrics, traces, alerts that must exist.>
 
-### 4.5 Testability
+### 4.6 Testability
 
 <What must be testable, what test surfaces are required.>
 

@@ -1,10 +1,10 @@
 ---
 name: deliverable
 description: >-
-  Use when the user asks to write, plan, or structure product or engineering
-  requirements — BRD, SRS, PRD, RFC, design doc, project charter, roadmap,
-  "spec this feature," "requirements for X," or any variant. Routes to the
-  appropriate deliverable sub-skill based on what the user needs.
+  [deliverable] Use when the user asks to write, plan, or structure product or
+  engineering requirements — BRD, SRS, PRD, RFC, design doc, project charter,
+  roadmap, "spec this feature," "requirements for X," or any variant. Routes to
+  the appropriate deliverable sub-skill based on what the user needs.
 ---
 
 # Deliverable — Requirements Authoring Suite
@@ -68,10 +68,10 @@ flowchart TD
     B -->|"charter", "initiative brief", "why are we doing this"| C[project-charter]
     B -->|"BRD", "requirements", "spec this", "business requirements"| D[business-requirements]
     B -->|"SRS", "technical spec", "architecture", "engineering spec"| E[technical-requirements]
-    B -->|"red-team", "challenge this", "what's wrong with this"| F[requirements-red-team]
+    B -->|"red-team", "challenge this", "what's wrong with this"| F[requirements-critic]
     B -->|"review", "audit", "check the docs"| G[requirements-review]
     B -->|"interview", "prepare questions", "ask stakeholders"| H[stakeholder-interview]
-    B -->|"upgrade", "update deliverable"| U[upgrade]
+    B -->|"upgrade", "update deliverable"| U[deliverable-upgrade]
     B -->|ambiguous| I[Ask user to clarify]
 ```
 
@@ -86,16 +86,16 @@ flowchart TD
 | "Project charter" / "Initiative brief"  | **project-charter**             | Explicit charter                      |
 | "Plan this project properly"            | **project-charter**             | Start from the top                    |
 | "Review the requirements"               | **requirements-review**         | Review existing docs                  |
-| "Red-team this" / "Challenge this spec" | **requirements-red-team**       | Adversarial review                    |
+| "Red-team this" / "Challenge this spec" | **requirements-critic**       | Adversarial review                    |
 | "I need to interview the CTO"           | **stakeholder-interview**       | Interview prep                        |
-| "upgrade deliverable" / "update"        | **upgrade**                     | Self-update                           |
+| "upgrade deliverable" / "update"        | **deliverable-upgrade**         | Self-update                           |
 | First time, no docs exist               | Offer **project-charter** first | Start from the top for greenfield     |
 | "Continue where we left off"            | Check `state.md`                | Resume whichever skill was active     |
 
 ### The natural flow
 
 ```
-project-charter → business-requirements → technical-requirements → requirements-red-team → requirements-review
+project-charter → business-requirements → technical-requirements → requirements-critic → requirements-review
                           ↑
                   stakeholder-interview (anytime)
 ```

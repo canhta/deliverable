@@ -1,8 +1,9 @@
 ---
 name: requirements-review
 description: >-
-  Use when the user asks to review, audit, or quality-check existing
-  requirements documents. Scores documents across 6 dimensions: completeness,
+  [deliverable] Use when the user asks to review, audit, or quality-check
+  existing requirements documents. Scores documents across 6 dimensions:
+  completeness,
   cross-link integrity, internal consistency, measurability, preset compliance,
   and downstream readiness. Produces a review report and offers to fix issues.
 ---
@@ -25,7 +26,7 @@ Announce at start: _"I'm using the requirements-review skill to audit your requi
 ## When to use
 
 - "review requirements", "audit the BRD", "check the docs", "quality check"
-- After requirements-red-team completes
+- After requirements-critic completes
 - Anytime — works on any existing docs in `docs/requirements/`
 
 ## Prerequisites

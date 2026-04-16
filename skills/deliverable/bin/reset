@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Reset deliverable state (keeps artifacts, clears session state)
-# Usage: ./scripts/reset.sh [--hard]
+# Usage: bin/reset [--hard]
 #   --hard: also removes docs/requirements/ artifacts
 
 set -euo pipefail
